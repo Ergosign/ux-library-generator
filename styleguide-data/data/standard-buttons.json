@@ -1,0 +1,16 @@
+{
+    "burger-button": {
+        "buttonModifiers": [
+            "button--icon-only"
+        ],
+        "noLabel": true,
+        "iconName": "burgermenu"
+    },
+    "flat-icon-button": {
+        "buttonModifiers": [
+            "button--icon-only",
+            "button--flat"
+        ],
+        "noLabel": true
+    }
+}
