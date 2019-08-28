@@ -1,0 +1,139 @@
+{
+  "colorColumns": [
+    {
+      "colorGroups": [
+        {
+          "groupName": "Main Colours",
+          "colorsInGroup": [
+            {
+              "colourName": "Royal Blue",
+              "cssClass": "ncia-royal-blue"
+            },
+            {
+              "colourName": "Tory Blue",
+              "cssClass": "ncia-tory-blue"
+            },
+            {
+              "colourName": "Onyx",
+              "cssClass": "ncia-onyx"
+            },
+            {
+              "colourName": "Cinder",
+              "cssClass": "ncia-cinder"
+            },
+            {
+              "colourName": "Black Rock",
+              "cssClass": "ncia-black-rock"
+            },
+            {
+              "colourName": "Licorice",
+              "cssClass": "ncia-licorice"
+            },
+            {
+              "colourName": "Mirage",
+              "cssClass": "ncia-mirage"
+            },
+            {
+              "colourName": "Blue Zodiac",
+              "cssClass": "ncia-blue-zodiac"
+            },
+            {
+              "colourName": "San Juan",
+              "cssClass": "ncia-san-juan"
+            },
+            {
+              "colourName": "Gray Suit",
+              "cssClass": "ncia-gray-suit"
+            },
+            {
+              "colourName": "Zircon",
+              "cssClass": "ncia-zircon"
+            }
+          ]
+        },
+        {
+          "groupName": "Alternative Colours",
+          "colorsInGroup": [
+            {
+              "colourName": "Navy",
+              "cssClass": "ncia-navy"
+            },
+            {
+              "colourName": "Glacier",
+              "cssClass": "ncia-glacier"
+            },
+            {
+              "colourName": "Charcoal",
+              "cssClass": "ncia-charcoal"
+            },
+            {
+              "colourName": "Gray",
+              "cssClass": "ncia-gray"
+            },
+            {
+              "colourName": "Silver",
+              "cssClass": "ncia-silver"
+            },
+            {
+              "colourName": "Mercury",
+              "cssClass": "ncia-mercury"
+            },
+            {
+              "colourName": "Stained",
+              "cssClass": "ncia-stained"
+            },
+            {
+              "colourName": "Snow",
+              "cssClass": "ncia-snow"
+            },
+            {
+              "colourName": "Snow 10%",
+              "cssClass": "ncia-snow_10"
+            },
+            {
+              "colourName": "Zircon 10%",
+              "cssClass": "ncia-zircon_10"
+            },
+            {
+              "colourName": "Zircon 33%",
+              "cssClass": "ncia-zircon_33"
+            },
+            {
+              "colourName": "Black",
+              "cssClass": "ncia-black"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "colorGroups": [
+        {
+          "groupName": "Attention Colours",
+          "colorsInGroup": [
+            {
+              "colourName": "OK",
+              "cssClass": "ncia-ok"
+            },
+            {
+              "colourName": "Secret",
+              "cssClass": "ncia-secret"
+            },
+            {
+              "colourName": "Mandatory",
+              "cssClass": "ncia-mandatory"
+            },
+            {
+              "colourName": "Attention",
+              "cssClass": "ncia-attention"
+            },
+            {
+              "colourName": "Pink",
+              "cssClass": "ncia-pink"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

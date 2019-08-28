@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en"
+      ng-app="fleetInfo"
+      ng-cloak>
+    <head>
+        <meta charset="utf-8">
+        <title>Style Guide</title>
+
+        <meta name="description"
+              content="">
+        <meta name="generator"
+              content="kss-node">
+        <meta name="viewport"
+              content="width=device-width">
+
+
+        <link rel="stylesheet"
+              href="css/ergosign-style-guide.css">
+        <!-- bower:css -->
+        <!-- endbower -->
+        <link rel="stylesheet"
+              href="css/documentation.css">
+        <link rel="stylesheet"
+              href="css/styles.css">
+
+        <style id="inline-kss-hack"></style>
+        <style id="inline-kss-hack-desktop"
+               media="screen and (min-width: 992px)"
+               type="text/css"></style>
+    </head>
+    <body class="es-styleguide show-mainnav"
+          id="kss-node">
+        <div class="es-header">
+            <div class="es-header-inner">
+                <div class="es-header-headline">
+                    <h2>{{uppercase kss.customerName}} - {{uppercase kss.projectName}}</h2>
+                    <h3>Version {{kss.versionNumber}} - {{buildDate}}</h3>
+                </div>
+                <div class="es-header-search-bar-wrapper es-search-collapsed">
+                    <div class="es-header-search-bar">
+                        <input placeholder="Search in components, descriptions and variations.."
+                               class="es-header-search-input">
+                    </div>
+                    <div class="es-header-search-results-flyout">
+                    </div>
+                </div>
+                <div class="es-header-logo-and-search">
+                    <div class="es-header-search-bar-container es-search-collapsed">
+                        <button class="es-header-search-button">
+                            <span class="es-search-search-button es-ico ico-search"></span><span class="es-search-close-button es-ico ico-delete"></span>
+                        </button>
+                    </div>
+                    <div class="es-header-divider"></div>
+                    <img src="img/ergosign-logo.svg"
+                         class="es-logo"
+                         alt="Ergosign Styleguide"
+                         title="Ergosign Styleguide"/>
+                </div>
+            </div>
+
+            <div class="es-header-color-strip">
+                <div class="es-header-color-strip-yellow"></div>
+                <div class="es-header-color-strip-red"></div>
+                <div class="es-header-color-strip-blue"></div>
+            </div>
+        </div>
+
+        <div class="es-mainnav-wrapper">
+            <ul class="es-mainnav">
+                {{#with page}}
+                    {{#each navBarItems}}
+                        {{#is sectionName 'index'}}
+                            <li>
+                                <a href="{{sectionName}}.html"
+                                   class="{{#is sectionName ../../parentSectionName}}es-active-section{{/is}}">
+                                    <span class="es-mainnav-title">{{sectionTitle}}</span></a>
+                            </li>
+                        {{else}}
+                            <li>
+                                <a class="es-mainnav-item {{#is sectionName ../../parentSectionName}}es-active-section {{else}} nav-collapsed {{/is}}">
+                                    <span class="nav-item-disclosure-icon es-ico ico-disclosuredown"></span>
+                                    <span class="es-mainnav-title">{{sectionTitle}}</span></a>
+                                <ul id="subsection-{{sectionName}}"
+                                    class="{{#is sectionName ../../parentSectionName}} {{else}}submenu-collapsed{{/is}}">
+                                    {{#each this.subSections}}
+                                        <li class="{{#is sectionName ../../../sectionName}}es-active-subsection{{/is}}">
+                                            <a href="overview-{{sectionName}}.html">
+                                                <span class="es-mainnav-subtitle">{{sectionTitle}}</span></a>
+                                        </li>
+                                    {{/each}}
+                                </ul>
+                            </li>
+                        {{/is}}
+                    {{/each}}
+                {{/with}}
+            </ul>
+        </div>
+
+        <article role="main"
+                 class="es-main-content">
+
+            {{#eachSubSectionQuery sectionName page.subSections}}
+                <div class="es-section-header es-section-header--level-{{level}}">
+
+                    <div class="es-section-title">
+                        <div class="es-section-anchor"
+                             id="{{sectionRef}}"></div>
+                        <h{{level}}>{{sectionTitle}}</h{{level}}>
+                        {{#ifLevel 2}}
+                        {{else}}
+                            <a href="#{{sectionRef}}"><span class="es-ico ico-link"></span></a>
+                        {{/ifLevel}}
+                    </div>
+
+                    {{#if properties.workflow-status}}
+                        <h3 class="es-workflow-status es-workflow-status--{{properties.workflow-status}}">
+                            STATUS:{{properties.workflow-status}}</h3>
+                    {{/if}}
+
+                    {{#if properties.scope}}
+                        <h3 class="es-scope es-scope--{{properties.scope}}">SCOPE:{{properties.scope}}</h3>
+                    {{/if}}
+
+                    {{#if properties.antetype-filename}}
+                        <div class="es-section-description">Antetype File: {{properties.antetype-filename}}</div>
+                    {{/if}}
+
+                    {{#if properties.antetype-module}}
+                        <div class="es-section-description">Antetype Search Path: {{properties.antetype-module}}</div>
+                    {{/if}}
+
+                    {{#if description}}
+                        <div class="es-section-description">{{#markedMarkdown}}{{description}}{{/markedMarkdown}}</div>
+                    {{/if}}
+
+                    {{#if properties.example-image}}
+                        <h4>Example Image</h4>
+                        <div class="es-section__image-wrapper"><img class="es-section__image"
+                                                                    src="style-guide-images/{{prefixWithSrcPath properties.example-image}}"/>
+                        </div>
+                    {{/if}}
+                </div>
+
+                {{#if markup}}
+                <div class="es-section-example  {{~#if properties.usefullwidth}} es-section-example--fullWidth{{/if}}">
+                    <div>
+                        {{#unless properties.no-iframe}}
+                            <div class="es-section-example-toggle">
+                                <div class="es-section-example-toggle-title">Example</div>
+                                <form>
+                                    <input type="radio"
+                                           name="rb-iframe"
+                                           checked>
+                                    <button class="es-section-example-iframe-toggle-button"
+                                            data-iframe="smartphone">
+                                        <span class="es-ico ico-smartphone"></span>
+                                    </button>
+
+                                    <input type="radio"
+                                           name="rb-iframe">
+                                    <button class="es-section-example-iframe-toggle-button"
+                                            data-iframe="tablet">
+                                        <span class="es-ico ico-tablet"></span>
+                                    </button>
+                                    <input type="radio"
+                                           name="rb-iframe">
+                                    <button class="es-section-example-iframe-toggle-button"
+                                            data-iframe="laptop">
+                                        <span class="es-ico ico-system"></span>
+                                    </button>
+                                    <input type="radio"
+                                           name="rb-iframe">
+                                    <button class="es-section-example-iframe-toggle-button"
+                                            data-iframe="all">
+                                        <span class="es-ico ico-placeholder"></span>
+                                    </button>
+                                </form>
+                            </div>
+                        {{/unless}}
+
+                        {{#ifLevel 1}}
+                        {{else}}
+                            <div class="es-section-example-srcpath">
+                                <a href="{{../../../gitlabStemUrl}}{{srcPath}}">{{srcPath}}</a>
+                            </div>
+                        {{/ifLevel}}
+
+                        {{#unless properties.no-iframe}}
+
+                            <iframe class="iframe-smartphone iframe-visible"
+                                    data-iframe="smartphone"
+                                    style="{{#if properties.iframe-height.[0]}}height: {{properties.iframe-height.[0]}}; {{/if}}
+                                        {{#if ../../media-queries.mediaQueries.[0]}}width: {{../../../media-queries.mediaQueries.[0].to}}px{{/if}}"
+                                    src='{{htmlFile}}'></iframe>
+
+
+                            <iframe class="iframe-tablet"
+                                    data-iframe="tablet"
+                                    src='{{htmlFile}}'
+                                    style="height:{{#if properties.iframe-height.[1]}} {{properties.iframe-height.[1]}}
+                                    {{else}} {{#if properties.iframe-height.[0]}} {{properties.iframe-height.[0]}}{{/if}}{{/if}};
+                                        {{#if ../../media-queries.mediaQueries.[1]}}width: {{../../../media-queries.mediaQueries.[1].to}}px{{/if}}"></iframe>
+                            <iframe class="iframe-laptop"
+                                    data-iframe="laptop"
+                                    src='{{htmlFile}}'
+                                    style="height:{{#if properties.iframe-height.[2]}} {{properties.iframe-height.[2]}}
+                                    {{else}} {{#if properties.iframe-height.[0]}} {{properties.iframe-height.[0]}}{{/if}}{{/if}};
+                                        {{#if ../../media-queries.mediaQueries.[2]}}width: {{../../../media-queries.mediaQueries.[2].to}}px{{/if}}"></iframe>
+
+                        {{else}}
+                            {{> iframe-content}}
+                        {{/unless}}
+                    </div>
+
+                    {{#if properties.hidemarkup}}
+                        <!--markup hidden-->
+                    {{else}}
+                        <div class="es-section-markup es-section-markup--collapsed">
+                            <div class="es-section-markup-togglebtn"><span class="es-ico ico-disclosuredown"></span>HTML
+                            </div>
+
+                            <div class="es-section-markup-codebox">
+                    <pre class="prettyprint linenums lang-html"><code
+                        data-language="html">{{markupWithStyle '[modifier_class]'}}</code><div class="es-section-markup-divider"></div></pre>
+                                <button class="codebox-copy-button"
+                                        data-clipboard-text="{{markupWithStyle '[modifier_class]'}}">
+                                    <span class="es-ico ico-copy"></span></button>
+                            </div>
+                            <div class="es-section-markup-srcpath">{{#if ../../../gitlabStemUrl}}<a
+                                href="{{../../../../gitlabStemUrl}}{{displayMarkupPath}}">{{displayMarkupPath}}</a>{{else}}{{displayMarkupPath}}{{/if}}
+                            </div>
+                        </div>
+                    {{/if}}
+                {{else}}
+                    {{#if angularMarkup}}
+                    <div class="es-section-example {{~#if properties.usefullwidth}} es-section-example--fullWidth{{/if}}">
+
+                        <styleguide-angular-component {{#requiresPseudoStateVariations}}generate-pseudo-states='true' {{#if properties.pseudostatesasflex}}pseudo-states-as-flex="true" {{/if}}{{/requiresPseudoStateVariations}}
+                            variations='{{stringify variations}}'
+                            wrapper-classes='"es-section-example-control {{~#each properties.wrapper-classes}} es-section-example-control--{{this}}{{/each~}}"'
+                            {{#if angularContext}}directive-scope='{{stringify angularContext}}'{{/if}}
+                        >
+                            {{#if properties.angular-wrapper}}
+                                <html-wrapper>
+                                    <xmp>{{{properties.angular-wrapper.[0]}}}</xmp>
+                                </html-wrapper>
+                            {{/if}}
+                            <directive-markup>
+                                <xmp>{{{angularMarkup}}}</xmp>
+                            </directive-markup>
+                        </styleguide-angular-component>
+
+                        <div class="es-section-markup es-section-markup--collapsed">
+                            <div class="es-section-markup-togglebtn"><span class="es-ico ico-disclosuredown"></span>Angular
+                                HTML
+                            </div>
+                            <div class="es-section-markup-srcpath">{{#if ../../../gitlabStemUrl}}<a
+                                href="{{../../../../gitlabStemUrl}}{{displayMarkupPath}}">{{displayMarkupPath}}</a>{{else}}{{displayMarkupPath}}{{/if}}
+                            </div>
+                            <div class="es-section-markup-codebox">
+                                <pre class="prettyprint linenums lang-html"><code data-language="html">{{angularMarkup}} </code></pre>
+                            </div>
+                        </div>
+                        <div class="es-section-markup es-section-markup--collapsed">
+                            <div class="es-section-markup-togglebtn"><span class="es-ico ico-disclosuredown"></span>Angular
+                                Context
+                            </div>
+                            <div class="es-section-markup-srcpath">{{#if ../../../gitlabStemUrl}}<a
+                                href="{{../../../../gitlabStemUrl}}{{displayContextPath}}">{{displayContextPath}}</a>{{else}}{{displayContextPath}}{{/if}}
+                            </div>
+                            <div class="es-section-markup-codebox">
+                        <pre class="prettyprint linenums lang-js"><code
+                            data-language="js">{{stringify angularContext}} </code></pre>
+                            </div>
+                        </div>
+                    {{/if}}
+                {{/if}} {{!-- if markup --}}
+
+                {{#ifLevel 1}}
+                </div>
+                {{else}}
+                    </section>
+                {{/ifLevel}}
+            {{/eachSubSectionQuery}}
+        </article>
+
+        <!-- bower:js -->
+        <!-- endbower -->
+
+        <!-- TODO replace with your projects javascript file (only replace the name) -->
+        <script src="js/init-uxhub.min.js"></script>
+
+        <script src="js/select.js"></script>
+        <script src="js/ergosign-style-guide.min.js"></script>
+        <script src="js/prettify.js"></script>
+
+        <script>
+            prettyPrint();
+        </script>
+
+        <div class="modal-dialog"></div>
+
+        {{{scripts}}}
+    </body>
+
+</html>
