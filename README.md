@@ -18,15 +18,6 @@ The Style guide is versioned via npm so that a particular version can be used by
 ## Getting started
 To use the stylguide in a vanilla project, follow the steps below:
 
-### Configuring access to nexus server
-The Ergosign Private npm server needs to be configured on each development machine with the scope @ergosign:
-
-`npm config set @ergosign:registry https://nexus.ergosign-projects.com/repository/es-npm-external/`
-
-Because the server is not open for public access the correct user settings must also be configured:
-
-`npm adduser --registry=https://nexus.ergosign-projects.com/repository/es-npm-external/ --scope=@ergosign`
-
 ### Installing the UX Library
 1. First install the package from the previously configured nexus server by adding the desired UX Library version to the 'package.json' file and run `npm install`.
 
@@ -78,9 +69,7 @@ The necessary information on how to build the style guide from the .scss comment
 ## Upgrading to the latest version
 Upgrading the style guide includes the following steps:
 1. To access the private kss-style-guide-ergosign-theme package you need to configure your access to the Ergosign private npm server as described in the projects [readme file](README.md).
-2. Add/Update the ux-library-generator and kss-style-guide-ergosign-theme packages to the devDependencies of your package.json: <br>`"grunt-assemble-kss": "0.2.3",
-"@ergosign-external/kss-style-guide-ergosign-theme": "0.2.4"`
-3. Add the following configuration options for the assemble task to your gruntfile and replace the instructions in angle brackets with the customer and project name (they will appear in the style guide header):
+2. Add the following configuration options for the assemble task to your gruntfile and replace the instructions in angle brackets with the customer and project name (they will appear in the style guide header):
 ```
     assemble: {
         standard: {
@@ -98,9 +87,8 @@ Upgrading the style guide includes the following steps:
         }
     }
 ```
-4. Rename the ergosign style guide package in the gruntfile from `@ergosign-external/grunt-ergosign-style-guide` to `@ergosign-external/kss-style-guide-ergosign-theme` 
-5. Install the packages using `npm install`
-6. The style guide navigation is based on a two level navigation. First level sections will be rendered as a collapsable dropdown in the navigation bar containing the second level sections which are links to the specific controls. The structure may look like this:
+3. Install the packages using `npm install`
+4. The style guide navigation is based on a two level navigation. First level sections will be rendered as a collapsable dropdown in the navigation bar containing the second level sections which are links to the specific controls. The structure may look like this:
 ```
 Building Blocks
     Some Flyout
@@ -108,16 +96,16 @@ Building Blocks
 Custom Controls
     Tooltip
 ```
-7. Therefore it is necessary to group the controls in sections (e.g. Building Blocks). To create sections just place a style guide comment in the sections .scss file with the title and path to the section. The comment looks like this:
+5. Therefore it is necessary to group the controls in sections (e.g. Building Blocks). To create sections just place a style guide comment in the sections .scss file with the title and path to the section. The comment looks like this:
 ```
 /*
 Building Blocks
 Styleguide Building Blocks
 */
 ```
-8. Kick off the style guide generation using `grunt run ergosign-style-guide`. This task will copy the new markup files *style-guide-layout.hbs* and *iframe-content.hbs* for the style guide to a folder called html in the generated style guide folder (default is www/style-guide). Move them to src/html/layout (overwrite old style guide markup file).
-9. Replace the name of the project specific javascript file at the end of both style guide markup files you previously copied with your projects javascript file name (the places are marked with TODOs).
-10. Each example control in the style guide is now rendered into an iframe which allows for fast switching between different breakpoints. The iframes have default sizes that can be overriden by specifying the height for each control as described in section [Style Guide Comments](#style-guide-comments) or by specifying the breakpoints (width) as described in section [Iframes](#Iframes).
+6. Kick off the style guide generation using `grunt run ergosign-style-guide`. This task will copy the new markup files *style-guide-layout.hbs* and *iframe-content.hbs* for the style guide to a folder called html in the generated style guide folder (default is www/style-guide). Move them to src/html/layout (overwrite old style guide markup file).
+7. Replace the name of the project specific javascript file at the end of both style guide markup files you previously copied with your projects javascript file name (the places are marked with TODOs).
+8. Each example control in the style guide is now rendered into an iframe which allows for fast switching between different breakpoints. The iframes have default sizes that can be overriden by specifying the height for each control as described in section [Style Guide Comments](#style-guide-comments) or by specifying the breakpoints (width) as described in section [Iframes](#Iframes).
 
 ## Iframes
 Each example control in the style guide is now rendered into an iframe which allows for fast switching between different breakpoints. The iframes have a default size that can be overridden by either specifying the height (for each control as a comment - see iframe-height in section [Style Guide Comments](#style-guide-comments)) or by specifying the width. To set custom widths for the iframes copy the *media-queries.json* file from www/style-guide/data to your projects src/html/data folder and adjust the breakpoints to fit your needs. You can also create the file by yourself using the following content:
