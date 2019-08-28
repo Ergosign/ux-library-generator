@@ -15,11 +15,11 @@
     },
     "requireUpstream": true,
     "dist": {
-      "status": false,
+      "status": true,
       "commit": true,
-      "tag": false,
+      "tag": true,
       "push": true,
-      "release": false,
+      "release": true,
       "publish": true
     },
     "github": {
