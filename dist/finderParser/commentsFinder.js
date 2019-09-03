@@ -47,4 +47,4 @@ function findCommentsInDirectory(directory, sourceMask, excludeMask) {
     return returnArray;
 }
 exports.findCommentsInDirectory = findCommentsInDirectory;
-//# sourceMappingURL=typeScriptCommentsFinder.js.map
+//# sourceMappingURL=commentsFinder.js.map

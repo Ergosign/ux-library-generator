@@ -1,38 +1,27 @@
-var chai = require('chai');
-var expect = chai.expect;
-chai.should();
+import * as commentsParser from '../scripts/finderParser/commentsParser';
 
-var grunt = require('grunt');
-
-var kssCommentsParser = require('../lib/kssCommentsParser');
-
-describe("parsing of comments", function()
-{
+describe("parsing of comments", function () {
 
     var sections;
     var createdTestSection;
 
-    beforeEach(function()
-    {
+    beforeEach(function () {
         sections = {
             level: 0
         };
     });
 
-    describe('a single line comment', function()
-    {
-        beforeEach(function()
-        {
+    describe('a single line comment', function () {
+        beforeEach(function () {
             var minimalComment = {
                 comment: '/* Just a Comment */',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
-            createdTestSection = kssCommentsParser.getSectionObjectOfKssComment(minimalComment, sections, grunt);
+            createdTestSection = commentsParser.getSectionObjectOfComment(minimalComment, sections);
         });
 
-        it('should be ignored', function()
-        {
-            createdTestSection.should.equal(-1);
+        it('should be ignored', function () {
+            expect(createdTestSection).toBe(-1);
         });
     });
 
@@ -44,27 +33,27 @@ describe("parsing of comments", function()
                 comment: '/*\nTitle \nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
-            createdTestSection = kssCommentsParser.getSectionObjectOfKssComment(minimalComment, sections, grunt);
+            createdTestSection = commentsParser.getSectionObjectOfComment(minimalComment, sections);
         });
 
         it('should create a section object', function()
         {
-            createdTestSection.should.not.equal(-1);
+            expect(createdTestSection).not.toEqual(-1);
         });
 
         it('should have a title', function()
         {
-            createdTestSection.should.have.property('sectionTitle').and.equal("Title");
+            expect(createdTestSection.sectionTitle).toEqual("Title");
         });
 
         it('should have a sectionName', function()
         {
-            createdTestSection.should.have.property('sectionName').and.equal("testsection");
+            expect(createdTestSection.sectionName).toEqual("testsection");
         });
 
         it('should have a srcPath', function()
         {
-            createdTestSection.should.have.property('srcPath').and.equal("doesNotExist/pathIsJustForTesting");
+            expect(createdTestSection.srcPath).toEqual("doesNotExist/pathIsJustForTesting");
         });
     });
 
@@ -76,22 +65,22 @@ describe("parsing of comments", function()
                 comment: '/*\nTitle\nA Test Description \nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
-            createdTestSection = kssCommentsParser.getSectionObjectOfKssComment(commentWithDescription, sections, grunt);
+            createdTestSection = commentsParser.getSectionObjectOfComment(commentWithDescription, sections);
         });
 
         it('should have a title', function()
         {
-            createdTestSection.should.have.property('sectionTitle').and.equal("Title");
+            expect(createdTestSection.sectionTitle).toEqual("Title");
         });
 
         it('should have a sectionName', function()
         {
-            createdTestSection.should.have.property('sectionName').and.equal("testsection");
+            expect(createdTestSection.sectionName).toEqual("testsection");
         });
 
         it('should have a description', function()
         {
-            createdTestSection.should.have.property('description').and.equal("A Test Description");
+            expect(createdTestSection.description).toEqual("A Test Description");
         });
     });
 
@@ -103,12 +92,12 @@ describe("parsing of comments", function()
                 comment: '/*\nTitle\nA Test Description\nDescription Line 2\nLine 3 \nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
-            createdTestSection = kssCommentsParser.getSectionObjectOfKssComment(commentWithDescription, sections, grunt);
+            createdTestSection = commentsParser.getSectionObjectOfComment(commentWithDescription, sections);
         });
 
         it('should have a multi line description', function()
         {
-            createdTestSection.should.have.property('description').and.equal("A Test Description\nDescription Line 2\nLine 3");
+            expect(createdTestSection.description).toEqual("A Test Description  \nDescription Line 2  \nLine 3");
         });
     });
 
@@ -120,22 +109,22 @@ describe("parsing of comments", function()
                 comment: '/*\nTitle\nA Test Description\nDescription Line 2\nLine 3\nMarkup: test.hbs\nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
-            createdTestSection = kssCommentsParser.getSectionObjectOfKssComment(commentWithDescription, sections, grunt);
+            createdTestSection = commentsParser.getSectionObjectOfComment(commentWithDescription, sections);
         });
 
         it('should have a title', function()
         {
-            createdTestSection.should.have.property('sectionTitle').and.equal("Title");
+            expect(createdTestSection.sectionTitle).toEqual("Title");
         });
 
         it('should have a multi line description', function()
         {
-            createdTestSection.should.have.property('description').and.equal("A Test Description  \nDescription Line 2  \nLine 3");
+            expect(createdTestSection.description).toEqual("A Test Description  \nDescription Line 2  \nLine 3");
         });
 
         it('should have a markup', function()
         {
-            createdTestSection.should.have.property('markup').and.equal("test.hbs");
+            expect(createdTestSection.markup).toEqual("test.hbs");
         });
 
     });
@@ -148,22 +137,22 @@ describe("parsing of comments", function()
                 comment: '/*\nTitle\nA Test Description\nDescription Line 2\nLine 3\nMarkup: <div><p>first line</p>\n<span>second line</span></div>\nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
-            createdTestSection = kssCommentsParser.getSectionObjectOfKssComment(commentWithDescription, sections, grunt);
+            createdTestSection = commentsParser.getSectionObjectOfComment(commentWithDescription, sections);
         });
 
         it('should have a title', function()
         {
-            createdTestSection.should.have.property('sectionTitle').and.equal("Title");
+            expect(createdTestSection.sectionTitle).toEqual("Title");
         });
 
         it('should have a multi line description', function()
         {
-            createdTestSection.should.have.property('description').and.equal("A Test Description  \nDescription Line 2  \nLine 3");
+            expect(createdTestSection.description).toEqual("A Test Description  \nDescription Line 2  \nLine 3");
         });
 
         it('should have a markup', function()
         {
-            createdTestSection.should.have.property('markup').and.equal("<div><p>first line</p>\n<span>second line</span></div>");
+            expect(createdTestSection.markup).toEqual("<div><p>first line</p>\n<span>second line</span></div>");
         });
 
     });
@@ -176,32 +165,32 @@ describe("parsing of comments", function()
                 comment: '/*\nTitle\nA Test Description\nDescription Line 2\nLine 3\nMarkup: test.hbs\n\n.test-class - testdescr \nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
-            createdTestSection = kssCommentsParser.getSectionObjectOfKssComment(commentWithDescription, sections, grunt);
+            createdTestSection = commentsParser.getSectionObjectOfComment(commentWithDescription, sections);
         });
 
         it('should have a title', function()
         {
-            createdTestSection.should.have.property('sectionTitle').and.equal("Title");
+            expect(createdTestSection.sectionTitle).toEqual("Title");
         });
 
         it('should have a sectionName', function()
         {
-            createdTestSection.should.have.property('sectionName').and.equal("testsection");
+            expect(createdTestSection.sectionName).toEqual("testsection");
         });
 
         it('should have a multi line description', function()
         {
-            createdTestSection.should.have.property('description').and.equal("A Test Description  \nDescription Line 2  \nLine 3");
+            expect(createdTestSection.description).toEqual("A Test Description  \nDescription Line 2  \nLine 3");
         });
 
         it('should have a markup', function()
         {
-            createdTestSection.should.have.property('markup').and.equal("test.hbs");
+            expect(createdTestSection.markup).toEqual("test.hbs");
         });
 
         it('should have a variation', function()
         {
-            createdTestSection.should.have.property('variations').to.deep.equal([{
+            expect(createdTestSection.variations).toEqual([{
                 variationName:        ".test-class",
                 variationDescription: "testdescr",
                 variationClass:       ["test-class"]
@@ -217,32 +206,32 @@ describe("parsing of comments", function()
                 comment: '/*\nTitle\nA Test Description\nDescription Line 2\nLine 3\nMarkup: test.hbs\n.test-class - testdescr\n.test-class2.test-class--modifier - testdescr2 \nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
-            createdTestSection = kssCommentsParser.getSectionObjectOfKssComment(commentWithDescription, sections, grunt);
+            createdTestSection = commentsParser.getSectionObjectOfComment(commentWithDescription, sections);
         });
 
         it('should have a title', function()
         {
-            createdTestSection.should.have.property('sectionTitle').and.equal("Title");
+            expect(createdTestSection.sectionTitle).toEqual("Title");
         });
 
         it('should have a sectionName', function()
         {
-            createdTestSection.should.have.property('sectionName').and.equal("testsection");
+            expect(createdTestSection.sectionName).toEqual("testsection");
         });
 
         it('should have a multi line description', function()
         {
-            createdTestSection.should.have.property('description').and.equal("A Test Description  \nDescription Line 2  \nLine 3");
+            expect(createdTestSection.description).toEqual("A Test Description  \nDescription Line 2  \nLine 3");
         });
 
         it('should have a markup', function()
         {
-            createdTestSection.should.have.property('markup').and.equal("test.hbs");
+            expect(createdTestSection.markup).toEqual("test.hbs");
         });
 
         it('should have variations', function()
         {
-            createdTestSection.should.have.property('variations').to.deep.equal([
+            expect(createdTestSection.variations).toEqual([
                 {
                     variationName:        ".test-class",
                     variationDescription: "testdescr",
@@ -265,29 +254,29 @@ describe("parsing of comments", function()
                 comment: '/*\nTitle\nA Test Description\nDescription Line 2\nLine 3\nMarkup: test.hbs\n\n.test-class2.test-class--modifier - testdescr2\n:focus.test-class3 - focusState \n.test-class2.test-class--modifier:active - testdescr2   \nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
-            createdTestSection = kssCommentsParser.getSectionObjectOfKssComment(commentWithDescription, sections, grunt);
+            createdTestSection = commentsParser.getSectionObjectOfComment(commentWithDescription, sections);
         });
 
         it('should have a title', function()
         {
-            createdTestSection.should.have.property('sectionTitle').and.equal("Title");
+            expect(createdTestSection.sectionTitle).toEqual("Title");
         });
         it('should have a sectionName', function()
         {
-            createdTestSection.should.have.property('sectionName').and.equal("testsection");
+            expect(createdTestSection.sectionName).toEqual("testsection");
         });
         it('should have a multi line description', function()
         {
-            createdTestSection.should.have.property('description').and.equal("A Test Description  \nDescription Line 2  \nLine 3");
+            expect(createdTestSection.description).toEqual("A Test Description  \nDescription Line 2  \nLine 3");
         });
         it('should have a markup', function()
         {
-            createdTestSection.should.have.property('markup').and.equal("test.hbs");
+            expect(createdTestSection.markup).toEqual("test.hbs");
         });
 
         it('should have variations with states', function()
         {
-            createdTestSection.should.have.property('variations').to.deep.equal([
+            expect(createdTestSection.variations).toEqual([
                 {
                     variationName:        ".test-class2.test-class--modifier",
                     variationDescription: "testdescr2",
@@ -315,29 +304,29 @@ describe("parsing of comments", function()
                 comment: '/*\nTitle\nA Test Description\nDescription Line 2\nLine 3\nMarkup: test.hbs\n\n.test-class - testdescr\n:hover - hoverState\n.test-class2.test-class--modifier - testdescr2\n:focus.test-class3 - focusState \n.test-class2.test-class--modifier:active - testdescr2   \nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
-            createdTestSection = kssCommentsParser.getSectionObjectOfKssComment(commentWithDescription, sections, grunt);
+            createdTestSection = commentsParser.getSectionObjectOfComment(commentWithDescription, sections);
         });
 
         it('should have a title', function()
         {
-            createdTestSection.should.have.property('sectionTitle').and.equal("Title");
+            expect(createdTestSection.sectionTitle).toEqual("Title");
         });
         it('should have a sectionName', function()
         {
-            createdTestSection.should.have.property('sectionName').and.equal("testsection");
+            expect(createdTestSection.sectionName).toEqual("testsection");
         });
         it('should have a multi line description', function()
         {
-            createdTestSection.should.have.property('description').and.equal("A Test Description  \nDescription Line 2  \nLine 3");
+            expect(createdTestSection.description).toEqual("A Test Description  \nDescription Line 2  \nLine 3");
         });
         it('should have a markup', function()
         {
-            createdTestSection.should.have.property('markup').and.equal("test.hbs");
+            expect(createdTestSection.markup).toEqual("test.hbs");
         });
 
         it('should have variations with states', function()
         {
-            createdTestSection.should.have.property('variations').to.deep.equal([
+            expect(createdTestSection.variations).toEqual([
                 {variationName: ".test-class", variationDescription: "testdescr", variationClass: ["test-class"]},
                 {variationName: ":hover", variationDescription: "hoverState", variationClass: ["pseudo-class-hover"]},
                 {
@@ -367,29 +356,29 @@ describe("parsing of comments", function()
                 comment: '/*\nTitle\nA Test Description\nDescription Line 2\nLine 3\nMarkup: test.hbs\n\n.test-class.test-class2:hover - testdescr \n\n:hover - hoverState\n:focus - focusState   \nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
-            createdTestSection = kssCommentsParser.getSectionObjectOfKssComment(commentWithDescription, sections, grunt);
+            createdTestSection = commentsParser.getSectionObjectOfComment(commentWithDescription, sections);
         });
 
         it('should have a title', function()
         {
-            createdTestSection.should.have.property('sectionTitle').and.equal("Title");
+            expect(createdTestSection.sectionTitle).toEqual("Title");
         });
         it('should have a sectionName', function()
         {
-            createdTestSection.should.have.property('sectionName').and.equal("testsection");
+            expect(createdTestSection.sectionName).toEqual("testsection");
         });
         it('should have a multi line description', function()
         {
-            createdTestSection.should.have.property('description').and.equal("A Test Description  \nDescription Line 2  \nLine 3");
+            expect(createdTestSection.description).toEqual("A Test Description  \nDescription Line 2  \nLine 3");
         });
         it('should have a markup', function()
         {
-            createdTestSection.should.have.property('markup').and.equal("test.hbs");
+            expect(createdTestSection.markup).toEqual("test.hbs");
         });
 
         it('should have variations with states', function()
         {
-            createdTestSection.should.have.property('variations').to.deep.equal([{
+            expect(createdTestSection.variations).toEqual([{
                 variationName:        ".test-class.test-class2:hover",
                 variationDescription: "testdescr",
                 variationClass:       ["test-class", "test-class2", "pseudo-class-hover"]
@@ -414,32 +403,32 @@ describe("parsing of comments", function()
                 comment: '/*\nTitle\nA Test Description\n\n\nMarkup: test.hbs\n\nwrapper-classes: background-dark \n\n\nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
-            createdTestSection = kssCommentsParser.getSectionObjectOfKssComment(commentWithDescription, sections, grunt);
+            createdTestSection = commentsParser.getSectionObjectOfComment(commentWithDescription, sections);
         });
 
         it('should have a title', function()
         {
-            createdTestSection.should.have.property('sectionTitle').and.equal("Title");
+            expect(createdTestSection.sectionTitle).toEqual("Title");
         });
 
         it('should have a sectionName', function()
         {
-            createdTestSection.should.have.property('sectionName').and.equal("testsection");
+            expect(createdTestSection.sectionName).toEqual("testsection");
         });
 
         it('should have a description', function()
         {
-            createdTestSection.should.have.property('description').and.equal("A Test Description");
+            expect(createdTestSection.description).toEqual("A Test Description");
         });
 
         it('should have a markup', function()
         {
-            createdTestSection.should.have.property('markup').and.equal("test.hbs");
+            expect(createdTestSection.markup).toEqual("test.hbs");
         });
 
         it('should have a property wrapper-classes', function()
         {
-            createdTestSection.should.have.property('properties').to.deep.equal(
+            expect(createdTestSection.properties).toEqual(
                 {
                     "wrapper-classes": ["background-dark"]
                 }
@@ -455,32 +444,32 @@ describe("parsing of comments", function()
                 comment: '/*\nTitle\nA Test Description\n\n\nMarkup: test.hbs\n\nwrapper-classes: background-dark, min-height , overflow \nWeight: -12  \n\n\nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
-            createdTestSection = kssCommentsParser.getSectionObjectOfKssComment(commentWithDescription, sections, grunt);
+            createdTestSection = commentsParser.getSectionObjectOfComment(commentWithDescription, sections);
         });
 
         it('should have a title', function()
         {
-            createdTestSection.should.have.property('sectionTitle').and.equal("Title");
+            expect(createdTestSection.sectionTitle).toEqual("Title");
         });
 
         it('should have a sectionName', function()
         {
-            createdTestSection.should.have.property('sectionName').and.equal("testsection");
+            expect(createdTestSection.sectionName).toEqual("testsection");
         });
 
         it('should have a description', function()
         {
-            createdTestSection.should.have.property('description').and.equal("A Test Description");
+            expect(createdTestSection.description).toEqual("A Test Description");
         });
 
         it('should have a markup', function()
         {
-            createdTestSection.should.have.property('markup').and.equal("test.hbs");
+            expect(createdTestSection.markup).toEqual("test.hbs");
         });
 
         it('should have properties', function()
         {
-            createdTestSection.should.have.property('properties').to.deep.equal(
+            expect(createdTestSection.properties).toEqual(
                 {
                     "wrapper-classes": ["background-dark", "min-height", "overflow"],
                     "weight":          ["-12"]
@@ -497,32 +486,32 @@ describe("parsing of comments", function()
                 comment: '/*\nTitle\nA Test Description\n\n\nMarkup: test.hbs\n.test-class - testdescr\n.test-class2 - testdescr2\n:hover - hoverState\n:focus - focusState \n\nwrapper-classes: background-dark, min-height , overflow \nWeight: -12  \n\n\nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
-            createdTestSection = kssCommentsParser.getSectionObjectOfKssComment(commentWithDescription, sections, grunt);
+            createdTestSection = commentsParser.getSectionObjectOfComment(commentWithDescription, sections);
         });
 
         it('should have a title', function()
         {
-            createdTestSection.should.have.property('sectionTitle').and.equal("Title");
+            expect(createdTestSection.sectionTitle).toEqual("Title");
         });
 
         it('should have a sectionName', function()
         {
-            createdTestSection.should.have.property('sectionName').and.equal("testsection");
+            expect(createdTestSection.sectionName).toEqual("testsection");
         });
 
         it('should have a description', function()
         {
-            createdTestSection.should.have.property('description').and.equal("A Test Description");
+            expect(createdTestSection.description).toEqual("A Test Description");
         });
 
         it('should have a markup', function()
         {
-            createdTestSection.should.have.property('markup').and.equal("test.hbs");
+            expect(createdTestSection.markup).toEqual("test.hbs");
         });
 
         it('should have variations with states', function()
         {
-            createdTestSection.should.have.property('variations').to.deep.equal([
+            expect(createdTestSection.variations).toEqual([
                 {variationName: ".test-class", variationDescription: "testdescr", variationClass: ["test-class"]},
                 {variationName: ".test-class2", variationDescription: "testdescr2", variationClass: ["test-class2"]},
                 {variationName: ":hover", variationDescription: "hoverState", variationClass: ["pseudo-class-hover"]},
@@ -532,7 +521,7 @@ describe("parsing of comments", function()
 
         it('should have properties', function()
         {
-            createdTestSection.should.have.property('properties').to.deep.equal(
+            expect(createdTestSection.properties).toEqual(
                 {
                     "wrapper-classes": ["background-dark", "min-height", "overflow"],
                     "weight":          ["-12"]
@@ -550,22 +539,22 @@ describe("parsing of comments", function()
                 comment: '/*\nTitle  \nWeight: -12 \nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
-            createdTestSection = kssCommentsParser.getSectionObjectOfKssComment(commentWithDescription, sections, grunt);
+            createdTestSection = commentsParser.getSectionObjectOfComment(commentWithDescription, sections);
         });
 
         it('should have a title', function()
         {
-            createdTestSection.should.have.property('sectionTitle').and.equal("Title");
+            expect(createdTestSection.sectionTitle).toEqual("Title");
         });
 
         it('should have a sectionName', function()
         {
-            createdTestSection.should.have.property('sectionName').and.equal("testsection");
+            expect(createdTestSection.sectionName).toEqual("testsection");
         });
 
         it('should have a property', function()
         {
-            createdTestSection.should.have.property('properties').to.deep.equal(
+            expect(createdTestSection.properties).toEqual(
                 {"weight": ["-12"]}
             );
         });
@@ -579,22 +568,22 @@ describe("parsing of comments", function()
                 comment: '/*\nTitle\nA Test Description\n\nangular-markup: test.html\n\n.test-class - testdescr\n.test-class2 - testdescr2\n:hover - hoverState\n:focus - focusState \n\nangular-wrapper: test,test\nwrapper-classes: background-dark, min-height , overflow \nWeight: -12  \n\n\nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
-            createdTestSection = kssCommentsParser.getSectionObjectOfKssComment(commentWithDescription, sections, grunt);
+            createdTestSection = commentsParser.getSectionObjectOfComment(commentWithDescription, sections);
         });
 
         it('should have a title', function()
         {
-            createdTestSection.should.have.property('sectionTitle').and.equal("Title");
+            expect(createdTestSection.sectionTitle).toEqual("Title");
         });
 
         it('should have a sectionName', function()
         {
-            createdTestSection.should.have.property('sectionName').and.equal("testsection");
+            expect(createdTestSection.sectionName).toEqual("testsection");
         });
 
         it('should have a description', function()
         {
-            createdTestSection.should.have.property('description').and.equal("A Test Description");
+            expect(createdTestSection.description).toEqual("A Test Description");
         });
 
        /*
@@ -606,7 +595,7 @@ describe("parsing of comments", function()
 
         it('should have variations with states', function()
         {
-            createdTestSection.should.have.property('variations').to.deep.equal([
+            expect(createdTestSection.variations).toEqual([
                 {variationName: ".test-class", variationDescription: "testdescr", variationClass: ["test-class"]},
                 {variationName: ".test-class2", variationDescription: "testdescr2", variationClass: ["test-class2"]},
                 {variationName: ":hover", variationDescription: "hoverState", variationClass: ["pseudo-class-hover"]},
@@ -616,7 +605,7 @@ describe("parsing of comments", function()
 
         it('should have properties', function()
         {
-            createdTestSection.should.have.property('properties').to.deep.equal(
+            expect(createdTestSection.properties).toEqual(
                 {
                     "angular-wrapper": ["test" , "test"],
                     "wrapper-classes": ["background-dark", "min-height", "overflow"],
@@ -634,22 +623,22 @@ describe("parsing of comments", function()
                 comment: '/*\nTitle\nA Test Description\n\nangular-markup: test.html\n\nangular-wrapper: test,test\nwrapper-classes: background-dark, min-height , overflow \nWeight: -12  \n\n\nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
-            createdTestSection = kssCommentsParser.getSectionObjectOfKssComment(commentWithDescription, sections, grunt);
+            createdTestSection = commentsParser.getSectionObjectOfComment(commentWithDescription, sections);
         });
 
         it('should have a title', function()
         {
-            createdTestSection.should.have.property('sectionTitle').and.equal("Title");
+            expect(createdTestSection.sectionTitle).toEqual("Title");
         });
 
         it('should have a sectionName', function()
         {
-            createdTestSection.should.have.property('sectionName').and.equal("testsection");
+            expect(createdTestSection.sectionName).toEqual("testsection");
         });
 
         it('should have a description', function()
         {
-            createdTestSection.should.have.property('description').and.equal("A Test Description");
+            expect(createdTestSection.description).toEqual("A Test Description");
         });
 
         /*
@@ -661,7 +650,7 @@ describe("parsing of comments", function()
 
         it('should have properties', function()
         {
-            createdTestSection.should.have.property('properties').to.deep.equal(
+            expect(createdTestSection.properties).toEqual(
                 {
                     "angular-wrapper": ["test" , "test"],
                     "wrapper-classes": ["background-dark", "min-height", "overflow"],
@@ -679,24 +668,23 @@ describe("parsing of comments", function()
                 comment: '/*\nTitle\nA Test Description\n\nangular-markup: test.html\n\nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
-            createdTestSection = kssCommentsParser.getSectionObjectOfKssComment(commentWithDescription, sections, grunt);
+            createdTestSection = commentsParser.getSectionObjectOfComment(commentWithDescription, sections);
         });
 
         it('should have a title', function()
         {
-            createdTestSection.should.have.property('sectionTitle').and.equal("Title");
+            expect(createdTestSection.sectionTitle).toEqual("Title");
         });
 
         it('should have a sectionName', function()
         {
-            createdTestSection.should.have.property('sectionName').and.equal("testsection");
+            expect(createdTestSection.sectionName).toEqual("testsection");
         });
 
         it('should have a description', function()
         {
-            createdTestSection.should.have.property('description').and.equal("A Test Description");
+            expect(createdTestSection.description).toEqual("A Test Description");
         });
 
     });
-
 });

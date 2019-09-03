@@ -88,7 +88,7 @@ app.task('bundleScss', ['load'], function () {
         var files_1 = fsExtra.readdirSync(siteData.scssPath);
         var bundler_1 = new scss_bundle_1.Bundler();
         files_1.forEach(function (value) {
-            bundler_1.Bundle(siteData.scssPath + '/' + value, undefined, undefined, files_1)
+            bundler_1.bundle(siteData.scssPath + '/' + value, undefined, undefined, files_1)
                 .then(function (bundle) {
                 fsExtra.writeFileSync('.tmp/styleguide/src/assets/scss/' + value, bundle.bundledContent);
             });

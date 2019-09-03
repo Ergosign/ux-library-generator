@@ -4,8 +4,8 @@ const _ = require('lodash');
 import * as fs from 'fs';
 import * as fsExtra from 'fs-extra';
 
-import { findCommentsInDirectory, findKssCommentsInFile } from '../finderParser/typeScriptCommentsFinder';
-import { convertKccCommentsToSectionObjects } from '../finderParser/typeScriptCommentsParser';
+import { findCommentsInDirectory } from '../finderParser/commentsFinder';
+import { convertKccCommentsToSectionObjects } from '../finderParser/commentsParser';
 
 export interface SiteJson {
     title: string;

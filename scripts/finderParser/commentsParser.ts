@@ -114,21 +114,21 @@ export function addSubSectionsToObject(subSections, parentSection, pathToRootSec
 }
 
 /**
- * split letiation string in name and description
- * @param: letiations array with string
+ * split variation string in name and description
+ * @param: variations array with string
  * @return Array object {name, description}
  */
-export function splitletiations(letiations) {
+export function splitvariations(variations) {
 
     const returnArray = [];
 
-    letiations.forEach(function (letiation) {
+    variations.forEach(function (variation) {
 
         let vName;
         let vDescription;
 
         // match until " -"
-        const classes = letiation.match(/(?:(?!\s\-).)*/i);
+        const classes = variation.match(/(?:(?!\s\-).)*/i);
         if (classes !== null && classes.length > 0) {
             vName = classes[0];
             vName = vName.trim();
@@ -137,7 +137,7 @@ export function splitletiations(letiations) {
         }
 
         // get description
-        vDescription = letiation.replace(vName, '');
+        vDescription = variation.replace(vName, '');
 
         if (!vDescription) {
             vDescription = '';
@@ -149,14 +149,14 @@ export function splitletiations(letiations) {
         let vClass = vName.replace(/\./g, ' ')
             .trim();
 
-        // his is a letiation and should return the pseudo-classes
+        // his is a variation and should return the pseudo-classes
         vClass = vClass.replace(/:/, ' pseudo-class-')
             .trim();
 
         returnArray.push({
-            letiationName: vName,
-            letiationDescription: vDescription,
-            letiationClass: vClass.split(' ')
+            variationName: vName,
+            variationDescription: vDescription,
+            variationClass: vClass.split(' ')
         });
     });
 
@@ -331,25 +331,25 @@ export function getSectionObjectOfComment(cssCommentPathObject, sections) {
         }
 
         /**
-         * letiations block
+         * variations block
          * **/
-            // check if letiations are available (start with .)
-            // get letiations
-        let letiationsIndexStart = -1;
-        let letiationsIndexEnd = -1;
-        let letiations = [];
-        let commentContainsletiations = cssLines.some(function (element, index, array) {
+            // check if variations are available (start with .)
+            // get variations
+        let variationsIndexStart = -1;
+        let variationsIndexEnd = -1;
+        let variations = [];
+        let commentContainsvariations = cssLines.some(function (element, index, array) {
             if (element.search(/^(\.|\:)\w+/i) === 0) {   /* ^\..* */
-                // found letiations start
-                if (letiationsIndexStart === -1) {
-                    letiationsIndexStart = index;
+                // found variations start
+                if (variationsIndexStart === -1) {
+                    variationsIndexStart = index;
                 }
-                // found letiations end
-                letiationsIndexEnd = index;
+                // found variations end
+                variationsIndexEnd = index;
 
-                letiations.push(element);
+                variations.push(element);
             }
-            if (index === array.length - 1 && letiations.length > 0) {
+            if (index === array.length - 1 && variations.length > 0) {
                 return true;
             }
             return false;
@@ -357,17 +357,17 @@ export function getSectionObjectOfComment(cssCommentPathObject, sections) {
 
         let markupLines;
 
-        // get markup above letiations
-        // remove letiations if available
-        // leave properties below letiations in cssLines
-        if (commentContainsletiations) {
-            //TODO if letiations without markup are allowed: descriptionLines = cssLines.slice(0, letiationsIndexStart);
+        // get markup above variations
+        // remove variations if available
+        // leave properties below variations in cssLines
+        if (commentContainsvariations) {
+            //TODO if variations without markup are allowed: descriptionLines = cssLines.slice(0, variationsIndexStart);
 
-            //let letiationLines = cssLines.slice(letiationIndexStart, letiationIndexEnd);
-            markupLines = cssLines.slice(0, letiationsIndexStart);
+            //let variationLines = cssLines.slice(variationIndexStart, variationIndexEnd);
+            markupLines = cssLines.slice(0, variationsIndexStart);
 
-            cssLines = cssLines.slice(letiationsIndexEnd + 1);
-            sectionObject.letiations = splitletiations(letiations);
+            cssLines = cssLines.slice(variationsIndexEnd + 1);
+            sectionObject.variations = splitvariations(variations);
         }
 
         /**
@@ -395,16 +395,16 @@ export function getSectionObjectOfComment(cssCommentPathObject, sections) {
         });
 
         if (commentContainsProperties) {
-            // if comments contains properties and no markup (assumption: no letiations)
+            // if comments contains properties and no markup (assumption: no variations)
             if (!commentContainsMarkup) {
                 descriptionLines = cssLines.slice(0, propertiesIndexStart);
-                descriptionString = descriptionLines.join('\n');
+                descriptionString = descriptionLines.join('  \n');
                 descriptionString = descriptionString.replace(/^\s+|\s+$/g, '');
                 if (descriptionString !== "") {
                     sectionObject.description = descriptionString.trim();
                 }
 
-                // comments contain markup and not already defined by letiations
+                // comments contain markup and not already defined by variations
             } else if (!markupLines) {
                 markupLines = cssLines.slice(0, propertiesIndexStart);
             }
@@ -412,11 +412,11 @@ export function getSectionObjectOfComment(cssCommentPathObject, sections) {
             sectionObject.properties = properties;
         }
 
-        // if comments does not contain markup, letiations an no properties
-        if (!commentContainsMarkup && !commentContainsProperties && !commentContainsletiations) {
+        // if comments does not contain markup, variations an no properties
+        if (!commentContainsMarkup && !commentContainsProperties && !commentContainsvariations) {
             // no properties and no markup but description
             descriptionLines = cssLines;
-            descriptionString = descriptionLines.join('\n');
+            descriptionString = descriptionLines.join('  \n');
             if (descriptionString !== "") {
                 sectionObject.description = descriptionString.trim();
             }
@@ -431,8 +431,6 @@ export function getSectionObjectOfComment(cssCommentPathObject, sections) {
 
         //test if markup is available
         let markupAvailable = new RegExp("^\s*Markup:\s*", "i").test(markup);
-        // test if anuglar-markup is available
-        let angularMarkupAvailable = new RegExp("^\s*Angular-Markup:\s*", "i").test(markup);
 
         let path, data, alternativePath, alternativeData, alternative2Path, alternative2Data;
         let jsonFileName;

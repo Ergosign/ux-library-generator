@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var replaceInFile = require("replace-in-file");
+var replace_in_file_1 = require("replace-in-file");
 var fs = require("fs");
 var commandLineArguments = process.argv;
 var targetPath = commandLineArguments[2];
@@ -39,7 +39,7 @@ var options = {
     allowEmptyPaths: false
 };
 try {
-    replaceInFile.sync(options);
+    replace_in_file_1.default.sync(options);
 }
 catch (error) {
     console.error('Error occurred:', error);

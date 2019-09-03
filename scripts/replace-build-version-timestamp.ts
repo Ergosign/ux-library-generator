@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import * as replaceInFile from 'replace-in-file';
+import replaceInFile from 'replace-in-file';
 import * as fs from 'fs';
 
 

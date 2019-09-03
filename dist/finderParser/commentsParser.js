@@ -101,17 +101,17 @@ function addSubSectionsToObject(subSections, parentSection, pathToRootSection, b
 }
 exports.addSubSectionsToObject = addSubSectionsToObject;
 /**
- * split letiation string in name and description
- * @param: letiations array with string
+ * split variation string in name and description
+ * @param: variations array with string
  * @return Array object {name, description}
  */
-function splitletiations(letiations) {
+function splitvariations(variations) {
     var returnArray = [];
-    letiations.forEach(function (letiation) {
+    variations.forEach(function (variation) {
         var vName;
         var vDescription;
         // match until " -"
-        var classes = letiation.match(/(?:(?!\s\-).)*/i);
+        var classes = variation.match(/(?:(?!\s\-).)*/i);
         if (classes !== null && classes.length > 0) {
             vName = classes[0];
             vName = vName.trim();
@@ -120,7 +120,7 @@ function splitletiations(letiations) {
             return;
         }
         // get description
-        vDescription = letiation.replace(vName, '');
+        vDescription = variation.replace(vName, '');
         if (!vDescription) {
             vDescription = '';
         }
@@ -129,18 +129,18 @@ function splitletiations(letiations) {
         // create class(es)
         var vClass = vName.replace(/\./g, ' ')
             .trim();
-        // his is a letiation and should return the pseudo-classes
+        // his is a variation and should return the pseudo-classes
         vClass = vClass.replace(/:/, ' pseudo-class-')
             .trim();
         returnArray.push({
-            letiationName: vName,
-            letiationDescription: vDescription,
-            letiationClass: vClass.split(' ')
+            variationName: vName,
+            variationDescription: vDescription,
+            variationClass: vClass.split(' ')
         });
     });
     return returnArray;
 }
-exports.splitletiations = splitletiations;
+exports.splitvariations = splitvariations;
 /**
  * split property line into property object of
  * propertyName
@@ -284,38 +284,38 @@ function getSectionObjectOfComment(cssCommentPathObject, sections) {
             }
         }
         /**
-         * letiations block
+         * variations block
          * **/
-        // check if letiations are available (start with .)
-        // get letiations
-        var letiationsIndexStart_1 = -1;
-        var letiationsIndexEnd_1 = -1;
-        var letiations_1 = [];
-        var commentContainsletiations = cssLines.some(function (element, index, array) {
+        // check if variations are available (start with .)
+        // get variations
+        var variationsIndexStart_1 = -1;
+        var variationsIndexEnd_1 = -1;
+        var variations_1 = [];
+        var commentContainsvariations = cssLines.some(function (element, index, array) {
             if (element.search(/^(\.|\:)\w+/i) === 0) { /* ^\..* */
-                // found letiations start
-                if (letiationsIndexStart_1 === -1) {
-                    letiationsIndexStart_1 = index;
+                // found variations start
+                if (variationsIndexStart_1 === -1) {
+                    variationsIndexStart_1 = index;
                 }
-                // found letiations end
-                letiationsIndexEnd_1 = index;
-                letiations_1.push(element);
+                // found variations end
+                variationsIndexEnd_1 = index;
+                variations_1.push(element);
             }
-            if (index === array.length - 1 && letiations_1.length > 0) {
+            if (index === array.length - 1 && variations_1.length > 0) {
                 return true;
             }
             return false;
         });
         var markupLines = void 0;
-        // get markup above letiations
-        // remove letiations if available
-        // leave properties below letiations in cssLines
-        if (commentContainsletiations) {
-            //TODO if letiations without markup are allowed: descriptionLines = cssLines.slice(0, letiationsIndexStart);
-            //let letiationLines = cssLines.slice(letiationIndexStart, letiationIndexEnd);
-            markupLines = cssLines.slice(0, letiationsIndexStart_1);
-            cssLines = cssLines.slice(letiationsIndexEnd_1 + 1);
-            sectionObject.letiations = splitletiations(letiations_1);
+        // get markup above variations
+        // remove variations if available
+        // leave properties below variations in cssLines
+        if (commentContainsvariations) {
+            //TODO if variations without markup are allowed: descriptionLines = cssLines.slice(0, variationsIndexStart);
+            //let variationLines = cssLines.slice(variationIndexStart, variationIndexEnd);
+            markupLines = cssLines.slice(0, variationsIndexStart_1);
+            cssLines = cssLines.slice(variationsIndexEnd_1 + 1);
+            sectionObject.variations = splitvariations(variations_1);
         }
         /**
          * properties block
@@ -341,15 +341,15 @@ function getSectionObjectOfComment(cssCommentPathObject, sections) {
             return false;
         });
         if (commentContainsProperties) {
-            // if comments contains properties and no markup (assumption: no letiations)
+            // if comments contains properties and no markup (assumption: no variations)
             if (!commentContainsMarkup) {
                 descriptionLines = cssLines.slice(0, propertiesIndexStart_1);
-                descriptionString = descriptionLines.join('\n');
+                descriptionString = descriptionLines.join('  \n');
                 descriptionString = descriptionString.replace(/^\s+|\s+$/g, '');
                 if (descriptionString !== "") {
                     sectionObject.description = descriptionString.trim();
                 }
-                // comments contain markup and not already defined by letiations
+                // comments contain markup and not already defined by variations
             }
             else if (!markupLines) {
                 markupLines = cssLines.slice(0, propertiesIndexStart_1);
@@ -357,11 +357,11 @@ function getSectionObjectOfComment(cssCommentPathObject, sections) {
             cssLines = cssLines.slice(propertiesIndexEnd_1 + 1);
             sectionObject.properties = properties_1;
         }
-        // if comments does not contain markup, letiations an no properties
-        if (!commentContainsMarkup && !commentContainsProperties && !commentContainsletiations) {
+        // if comments does not contain markup, variations an no properties
+        if (!commentContainsMarkup && !commentContainsProperties && !commentContainsvariations) {
             // no properties and no markup but description
             descriptionLines = cssLines;
-            descriptionString = descriptionLines.join('\n');
+            descriptionString = descriptionLines.join('  \n');
             if (descriptionString !== "") {
                 sectionObject.description = descriptionString.trim();
             }
@@ -374,8 +374,6 @@ function getSectionObjectOfComment(cssCommentPathObject, sections) {
         var markup = markupLines.join("\n");
         //test if markup is available
         var markupAvailable = new RegExp("^\s*Markup:\s*", "i").test(markup);
-        // test if anuglar-markup is available
-        var angularMarkupAvailable = new RegExp("^\s*Angular-Markup:\s*", "i").test(markup);
         var path_1, data = void 0, alternativePath = void 0, alternativeData = void 0, alternative2Path = void 0, alternative2Data = void 0;
         var jsonFileName = void 0;
         var alternativeJsonFileName = void 0, alternative2JsonFileName = void 0;
@@ -498,4 +496,4 @@ function convertKccCommentsToSectionObjects(inputComments) {
     return sections;
 }
 exports.convertKccCommentsToSectionObjects = convertKccCommentsToSectionObjects;
-//# sourceMappingURL=typeScriptCommentsParser.js.map
+//# sourceMappingURL=commentsParser.js.map

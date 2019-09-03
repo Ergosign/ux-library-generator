@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var _ = require('lodash');
 var fs = require("fs");
 var fsExtra = require("fs-extra");
-var typeScriptCommentsFinder_1 = require("../finderParser/typeScriptCommentsFinder");
-var typeScriptCommentsParser_1 = require("../finderParser/typeScriptCommentsParser");
+var commentsFinder_1 = require("../finderParser/commentsFinder");
+var commentsParser_1 = require("../finderParser/commentsParser");
 function parseSiteJson() {
     var siteFileContents = fs.readFileSync('.tmp/styleguide-data/data/site.json');
     var siteJson = JSON.parse(siteFileContents.toString());
@@ -65,8 +65,8 @@ function setupContent(app) {
     var siteData = parseSiteJson();
     var componentPath = siteData.componentPath;
     // setup the uxLibrary pages
-    var foundComments = typeScriptCommentsFinder_1.findCommentsInDirectory(componentPath, '*.scss', '');
-    var uxSections = typeScriptCommentsParser_1.convertKccCommentsToSectionObjects(foundComments);
+    var foundComments = commentsFinder_1.findCommentsInDirectory(componentPath, '*.scss', '');
+    var uxSections = commentsParser_1.convertKccCommentsToSectionObjects(foundComments);
     var overviewMarkdownFile = siteData.overviewMarkdownFile;
     var sections = {};
     // in addition to the pages generated from the KSS comments create an index / overview page

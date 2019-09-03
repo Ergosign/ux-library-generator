@@ -24,7 +24,7 @@ if (siteData.scssPath) {
     var bundler = new Bundler();
     fsExtra.ensureDirSync('.tmp/styleguide/src/assets/scss/');
     files.forEach(value => {
-        bundler.Bundle(siteData.scssPath + '/' + value, undefined, undefined, files)
+        bundler.bundle(siteData.scssPath + '/' + value, undefined, undefined, files)
             .then(bundle => {
                 fsExtra.writeFileSync('.tmp/styleguide/src/assets/scss/' + value, bundle.bundledContent);
             })

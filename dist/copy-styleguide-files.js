@@ -23,7 +23,7 @@ if (siteData.scssPath) {
     var bundler = new scss_bundle_1.Bundler();
     fsExtra.ensureDirSync('.tmp/styleguide/src/assets/scss/');
     files.forEach(function (value) {
-        bundler.Bundle(siteData.scssPath + '/' + value, undefined, undefined, files)
+        bundler.bundle(siteData.scssPath + '/' + value, undefined, undefined, files)
             .then(function (bundle) {
             fsExtra.writeFileSync('.tmp/styleguide/src/assets/scss/' + value, bundle.bundledContent);
         });
