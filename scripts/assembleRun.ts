@@ -65,7 +65,7 @@ app.asyncHelper('markupWithStyleForCodebox', function (options, cb) {
 
     console.log('now rendering:');
     let renderResult = app.engine('.hbs')
-        .renderSync(template, markupContext);
+        .render(template, markupContext);
 
     console.log(renderResult);
     cb(null, handlebarsEngine.Utils.escapeExpression(prettify(renderResult.trim())));
@@ -95,7 +95,7 @@ app.task('default', function () {
  * Task that renders example layout pages that specify their surrounding layout inside their hbs file and have their associated data inside a json file with the same file name inside the same folder.
  */
 app.task('buildPages', function () {
-    // rename file extension (using gulpExtName) from .hbs to .html because assemble doesnt do it anymore: https://github.com/assemble/assemble/issues/633
+    // rename file extension (using gulpExtName) from .hbs to .html because assemble doesn't do it anymore: https://github.com/assemble/assemble/issues/633
 
     app.src((siteData.examplePagesSourcePath) + '/**/*.hbs')
         .pipe(gulpExtName())

@@ -9,9 +9,10 @@
   "scripts": {
     "build": "npm run compile-scripts",
     "install-styleguide": "node dist/install-styleguide.js",
+    "test-style-guide-build": "npm run build && node dist/assembleRun.js",
     "compile-scripts": "tsc --project tsconfig.scripts.json",
     "test": "jest",
-    "test-watch": "jest -w",
+    "test-watch": "jest --watch",
     "start-ux-library": "ux-library-generator-copy-files && ux-library-generator-generate && concurrently \"ux-library-generator-generate watch\" \"npm run ux-library-serve\"",
     "release-it-beta": "release-it -n --preRelease=beta --npm.tag=next --verbose",
     "release-it-patch": "release-it patch -n --verbose",

@@ -41,7 +41,7 @@ function registerHandlebarsHelpersMarkup(Handlebars, engine) {
         // escape the html and rendered it as text in the codebox. Three braces "{{{..}}}" rendered the HTML. But now with the engine-handlebars used by assemble, even the two braces render the HTML and thus break the codebox.
         // I also tried to escape the html tags in this helper but the html returned here contains Async ID's instead of the final markup. This is why I can't replace HTML tags here..
         // Here is an answer to an issue where the async thing is explained: https://github.com/assemble/assemble/issues/811#issuecomment-171673882
-        // If I use the regular handlebars in here, the asyncID's are gone and I can replace HTML tags, but that regular handlebars instance of course doesnt know about the partials and layouts registered to the assemble handlebars version.
+        // If I use the regular handlebars in here, the asyncID's are gone and I can replace HTML tags, but that regular handlebars instance of course doesn't know about the partials and layouts registered to the assemble handlebars version.
         // and we probably don't want to run two assemble instances in parallel..
         return html;
     });

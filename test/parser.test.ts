@@ -13,7 +13,7 @@ describe("parsing of comments", function () {
 
     describe('a single line comment', function () {
         beforeEach(function () {
-            var minimalComment = {
+            let minimalComment = {
                 comment: '/* Just a Comment */',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
@@ -29,7 +29,7 @@ describe("parsing of comments", function () {
     {
         beforeEach(function()
         {
-            var minimalComment = {
+            let minimalComment = {
                 comment: '/*\nTitle \nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
@@ -61,7 +61,7 @@ describe("parsing of comments", function () {
     {
         beforeEach(function()
         {
-            var commentWithDescription = {
+            let commentWithDescription = {
                 comment: '/*\nTitle\nA Test Description \nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
@@ -88,7 +88,7 @@ describe("parsing of comments", function () {
     {
         beforeEach(function()
         {
-            var commentWithDescription = {
+            let commentWithDescription = {
                 comment: '/*\nTitle\nA Test Description\nDescription Line 2\nLine 3 \nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
@@ -105,7 +105,7 @@ describe("parsing of comments", function () {
     {
         beforeEach(function()
         {
-            var commentWithDescription = {
+            let commentWithDescription = {
                 comment: '/*\nTitle\nA Test Description\nDescription Line 2\nLine 3\nMarkup: test.hbs\nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
@@ -133,7 +133,7 @@ describe("parsing of comments", function () {
     {
         beforeEach(function()
         {
-            var commentWithDescription = {
+            let commentWithDescription = {
                 comment: '/*\nTitle\nA Test Description\nDescription Line 2\nLine 3\nMarkup: <div><p>first line</p>\n<span>second line</span></div>\nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
@@ -161,8 +161,8 @@ describe("parsing of comments", function () {
     {
         beforeEach(function()
         {
-            var commentWithDescription = {
-                comment: '/*\nTitle\nA Test Description\nDescription Line 2\nLine 3\nMarkup: test.hbs\n\n.test-class - testdescr \nStyleguide testSection \n*/',
+            let commentWithDescription = {
+                comment: '/*\nTitle\nA Test Description\nDescription Line 2\nLine 3\nMarkup: test.hbs\n\n.test-class - Variation Description \nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
             createdTestSection = commentsParser.getSectionObjectOfComment(commentWithDescription, sections);
@@ -192,7 +192,7 @@ describe("parsing of comments", function () {
         {
             expect(createdTestSection.variations).toEqual([{
                 variationName:        ".test-class",
-                variationDescription: "testdescr",
+                variationDescription: "Variation Description",
                 variationClass:       ["test-class"]
             }]);
         });
@@ -202,8 +202,8 @@ describe("parsing of comments", function () {
     {
         beforeEach(function()
         {
-            var commentWithDescription = {
-                comment: '/*\nTitle\nA Test Description\nDescription Line 2\nLine 3\nMarkup: test.hbs\n.test-class - testdescr\n.test-class2.test-class--modifier - testdescr2 \nStyleguide testSection \n*/',
+            let commentWithDescription = {
+                comment: '/*\nTitle\nA Test Description\nDescription Line 2\nLine 3\nMarkup: test.hbs\n.test-class - Variation Description\n.test-class2.test-class--modifier - Variation Description2 \nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
             createdTestSection = commentsParser.getSectionObjectOfComment(commentWithDescription, sections);
@@ -234,12 +234,12 @@ describe("parsing of comments", function () {
             expect(createdTestSection.variations).toEqual([
                 {
                     variationName:        ".test-class",
-                    variationDescription: "testdescr",
+                    variationDescription: "Variation Description",
                     variationClass:       ["test-class"]
                 },
                 {
                     variationName:        ".test-class2.test-class--modifier",
-                    variationDescription: "testdescr2",
+                    variationDescription: "Variation Description2",
                     variationClass:       ["test-class2", "test-class--modifier"]
                 }
             ]);
@@ -250,8 +250,8 @@ describe("parsing of comments", function () {
     {
         beforeEach(function()
         {
-            var commentWithDescription = {
-                comment: '/*\nTitle\nA Test Description\nDescription Line 2\nLine 3\nMarkup: test.hbs\n\n.test-class2.test-class--modifier - testdescr2\n:focus.test-class3 - focusState \n.test-class2.test-class--modifier:active - testdescr2   \nStyleguide testSection \n*/',
+            let commentWithDescription = {
+                comment: '/*\nTitle\nA Test Description\nDescription Line 2\nLine 3\nMarkup: test.hbs\n\n.test-class2.test-class--modifier - Variation Description2\n:focus.test-class3 - focusState \n.test-class2.test-class--modifier:active - Variation Description2   \nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
             createdTestSection = commentsParser.getSectionObjectOfComment(commentWithDescription, sections);
@@ -279,7 +279,7 @@ describe("parsing of comments", function () {
             expect(createdTestSection.variations).toEqual([
                 {
                     variationName:        ".test-class2.test-class--modifier",
-                    variationDescription: "testdescr2",
+                    variationDescription: "Variation Description2",
                     variationClass:       ["test-class2", "test-class--modifier"]
                 },
                 {
@@ -289,7 +289,7 @@ describe("parsing of comments", function () {
                 },
                 {
                     variationName:        ".test-class2.test-class--modifier:active",
-                    variationDescription: "testdescr2",
+                    variationDescription: "Variation Description2",
                     variationClass:       ["test-class2", "test-class--modifier", "pseudo-class-active"]
                 }
             ]);
@@ -300,8 +300,8 @@ describe("parsing of comments", function () {
     {
         beforeEach(function()
         {
-            var commentWithDescription = {
-                comment: '/*\nTitle\nA Test Description\nDescription Line 2\nLine 3\nMarkup: test.hbs\n\n.test-class - testdescr\n:hover - hoverState\n.test-class2.test-class--modifier - testdescr2\n:focus.test-class3 - focusState \n.test-class2.test-class--modifier:active - testdescr2   \nStyleguide testSection \n*/',
+            let commentWithDescription = {
+                comment: '/*\nTitle\nA Test Description\nDescription Line 2\nLine 3\nMarkup: test.hbs\n\n.test-class - Variation Description\n:hover - hoverState\n.test-class2.test-class--modifier - Variation Description2\n:focus.test-class3 - focusState \n.test-class2.test-class--modifier:active - Variation Description2   \nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
             createdTestSection = commentsParser.getSectionObjectOfComment(commentWithDescription, sections);
@@ -327,11 +327,11 @@ describe("parsing of comments", function () {
         it('should have variations with states', function()
         {
             expect(createdTestSection.variations).toEqual([
-                {variationName: ".test-class", variationDescription: "testdescr", variationClass: ["test-class"]},
+                {variationName: ".test-class", variationDescription: "Variation Description", variationClass: ["test-class"]},
                 {variationName: ":hover", variationDescription: "hoverState", variationClass: ["pseudo-class-hover"]},
                 {
                     variationName:        ".test-class2.test-class--modifier",
-                    variationDescription: "testdescr2",
+                    variationDescription: "Variation Description2",
                     variationClass:       ["test-class2", "test-class--modifier"]
                 },
                 {
@@ -341,7 +341,7 @@ describe("parsing of comments", function () {
                 },
                 {
                     variationName:        ".test-class2.test-class--modifier:active",
-                    variationDescription: "testdescr2",
+                    variationDescription: "Variation Description2",
                     variationClass:       ["test-class2", "test-class--modifier", "pseudo-class-active"]
                 }
             ]);
@@ -352,8 +352,8 @@ describe("parsing of comments", function () {
     {
         beforeEach(function()
         {
-            var commentWithDescription = {
-                comment: '/*\nTitle\nA Test Description\nDescription Line 2\nLine 3\nMarkup: test.hbs\n\n.test-class.test-class2:hover - testdescr \n\n:hover - hoverState\n:focus - focusState   \nStyleguide testSection \n*/',
+            let commentWithDescription = {
+                comment: '/*\nTitle\nA Test Description\nDescription Line 2\nLine 3\nMarkup: test.hbs\n\n.test-class.test-class2:hover - Variation Description \n\n:hover - hoverState\n:focus - focusState   \nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
             createdTestSection = commentsParser.getSectionObjectOfComment(commentWithDescription, sections);
@@ -380,16 +380,16 @@ describe("parsing of comments", function () {
         {
             expect(createdTestSection.variations).toEqual([{
                 variationName:        ".test-class.test-class2:hover",
-                variationDescription: "testdescr",
+                variationDescription: "Variation Description",
                 variationClass:       ["test-class", "test-class2", "pseudo-class-hover"]
             }, {
-                "variationClass":       ["pseudo-class-hover"],
-                "variationDescription": "hoverState",
-                "variationName":        ":hover"
+                variationClass:       ["pseudo-class-hover"],
+                variationDescription: "hoverState",
+                variationName:        ":hover"
             }, {
-                "variationClass":       ["pseudo-class-focus"],
-                "variationDescription": "focusState",
-                "variationName":        ":focus"
+                variationClass:       ["pseudo-class-focus"],
+                variationDescription: "focusState",
+                variationName:        ":focus"
             }
             ]);
         });
@@ -399,7 +399,7 @@ describe("parsing of comments", function () {
     {
         beforeEach(function()
         {
-            var commentWithDescription = {
+            let commentWithDescription = {
                 comment: '/*\nTitle\nA Test Description\n\n\nMarkup: test.hbs\n\nwrapper-classes: background-dark \n\n\nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
@@ -440,7 +440,7 @@ describe("parsing of comments", function () {
     {
         beforeEach(function()
         {
-            var commentWithDescription = {
+            let commentWithDescription = {
                 comment: '/*\nTitle\nA Test Description\n\n\nMarkup: test.hbs\n\nwrapper-classes: background-dark, min-height , overflow \nWeight: -12  \n\n\nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
@@ -482,8 +482,8 @@ describe("parsing of comments", function () {
     {
         beforeEach(function()
         {
-            var commentWithDescription = {
-                comment: '/*\nTitle\nA Test Description\n\n\nMarkup: test.hbs\n.test-class - testdescr\n.test-class2 - testdescr2\n:hover - hoverState\n:focus - focusState \n\nwrapper-classes: background-dark, min-height , overflow \nWeight: -12  \n\n\nStyleguide testSection \n*/',
+            let commentWithDescription = {
+                comment: '/*\nTitle\nA Test Description\n\n\nMarkup: test.hbs\n.test-class - Variation Description\n.test-class2 - Variation Description2\n:hover - hoverState\n:focus - focusState \n\nwrapper-classes: background-dark, min-height , overflow \nWeight: -12  \n\n\nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
             createdTestSection = commentsParser.getSectionObjectOfComment(commentWithDescription, sections);
@@ -512,8 +512,8 @@ describe("parsing of comments", function () {
         it('should have variations with states', function()
         {
             expect(createdTestSection.variations).toEqual([
-                {variationName: ".test-class", variationDescription: "testdescr", variationClass: ["test-class"]},
-                {variationName: ".test-class2", variationDescription: "testdescr2", variationClass: ["test-class2"]},
+                {variationName: ".test-class", variationDescription: "Variation Description", variationClass: ["test-class"]},
+                {variationName: ".test-class2", variationDescription: "Variation Description2", variationClass: ["test-class2"]},
                 {variationName: ":hover", variationDescription: "hoverState", variationClass: ["pseudo-class-hover"]},
                 {variationName: ":focus", variationDescription: "focusState", variationClass: ["pseudo-class-focus"]}
             ]);
@@ -535,7 +535,7 @@ describe("parsing of comments", function () {
 
         beforeEach(function()
         {
-            var commentWithDescription = {
+            let commentWithDescription = {
                 comment: '/*\nTitle  \nWeight: -12 \nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
@@ -564,8 +564,8 @@ describe("parsing of comments", function () {
     {
         beforeEach(function()
         {
-            var commentWithDescription = {
-                comment: '/*\nTitle\nA Test Description\n\nangular-markup: test.html\n\n.test-class - testdescr\n.test-class2 - testdescr2\n:hover - hoverState\n:focus - focusState \n\nangular-wrapper: test,test\nwrapper-classes: background-dark, min-height , overflow \nWeight: -12  \n\n\nStyleguide testSection \n*/',
+            let commentWithDescription = {
+                comment: '/*\nTitle\nA Test Description\n\nangular-markup: test.html\n\n.test-class - Variation Description\n.test-class2 - Variation Description2\n:hover - hoverState\n:focus - focusState \n\nangular-wrapper: test,test\nwrapper-classes: background-dark, min-height , overflow \nWeight: -12  \n\n\nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
             createdTestSection = commentsParser.getSectionObjectOfComment(commentWithDescription, sections);
@@ -596,8 +596,8 @@ describe("parsing of comments", function () {
         it('should have variations with states', function()
         {
             expect(createdTestSection.variations).toEqual([
-                {variationName: ".test-class", variationDescription: "testdescr", variationClass: ["test-class"]},
-                {variationName: ".test-class2", variationDescription: "testdescr2", variationClass: ["test-class2"]},
+                {variationName: ".test-class", variationDescription: "Variation Description", variationClass: ["test-class"]},
+                {variationName: ".test-class2", variationDescription: "Variation Description2", variationClass: ["test-class2"]},
                 {variationName: ":hover", variationDescription: "hoverState", variationClass: ["pseudo-class-hover"]},
                 {variationName: ":focus", variationDescription: "focusState", variationClass: ["pseudo-class-focus"]}
             ]);
@@ -619,7 +619,7 @@ describe("parsing of comments", function () {
     {
         beforeEach(function()
         {
-            var commentWithDescription = {
+            let commentWithDescription = {
                 comment: '/*\nTitle\nA Test Description\n\nangular-markup: test.html\n\nangular-wrapper: test,test\nwrapper-classes: background-dark, min-height , overflow \nWeight: -12  \n\n\nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };
@@ -664,7 +664,7 @@ describe("parsing of comments", function () {
     {
         beforeEach(function()
         {
-            var commentWithDescription = {
+            let commentWithDescription = {
                 comment: '/*\nTitle\nA Test Description\n\nangular-markup: test.html\n\nStyleguide testSection \n*/',
                 srcPath: "doesNotExist/pathIsJustForTesting"
             };

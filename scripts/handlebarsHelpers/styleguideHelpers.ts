@@ -175,22 +175,22 @@ export function registerHandlebarsHelpersStyleguide(Handlebars) {
      * Similar to the {#eachSection} helper, however will loop over each modifier
      * @param  {Object} section Supply a section object to loop over its modifiers. Defaults to the current section.
      */
-    Handlebars.registerHelper('eachletiation', function (options) {
+    Handlebars.registerHelper('eachVariation', function (options) {
 
         let context = this;
         let buffer = '';
-        if (!this || !context.letiations) {
+        if (!this || !context.variations) {
             return '';
         }
-        context.letiations.forEach(function (letiation) {
+        context.variations.forEach(function (variation) {
 
-            let newContext = _.merge(context, letiation);
+            let newContext = _.merge(context, variation);
             // add modifier_class to markupContext
             if (!newContext.hasOwnProperty('markupContext')) {
                 newContext.markupContext = {};
             }
 
-            newContext.markupContext.modifier_class = (letiation.letiationClass).join(" ");
+            newContext.markupContext.modifier_class = (variation.variationClass).join(" ");
 
             buffer += options.fn(newContext);
 

@@ -1,16 +1,15 @@
-var path = require('path');
-var chai = require('chai');
-var expect = chai.expect;
-var should = chai.should();
-var Handlebars = require('handlebars');
+import * as Handlebars from 'handlebars';
 
 // Local helpers
-require('../../lib/handlebars-helpers/styleguideHelpers.js').register(Handlebars, {});
+import { registerHandlebarsHelpersMarkup } from '../../scripts/handlebarsHelpers/markupHelpers';
+registerHandlebarsHelpersMarkup(Handlebars, {});
+import { registerHandlebarsHelpersStyleguide } from '../../scripts/handlebarsHelpers/styleguideHelpers';
+registerHandlebarsHelpersStyleguide(Handlebars);
 
 
 describe('Styleguide Helper Tests', function () {
 
-    var context;
+    let context;
 
     beforeEach(function () {
 
@@ -21,38 +20,42 @@ describe('Styleguide Helper Tests', function () {
     describe('{{#eachSectionRoot rootSections options}} {{/eachSectionRoot}}', function () {
 
         it('should return empty String', function () {
-            var template = Handlebars.compile('{{#eachSectionRoot }} {{sectionName}} {{/eachSectionRoot}}');
-            template(context).should.equal('');
+            let template = Handlebars.compile('{{#eachSectionRoot }} {{sectionName}} {{/eachSectionRoot}}');
+            let renderedHTML = template(context);
+            expect(renderedHTML).toEqual('');
         });
 
         it('should return empty String', function () {
-            var undefinedSection;
+            let undefinedSection;
             context['sections'] = undefinedSection;
-            var template = Handlebars.compile('{{#eachSectionRoot sections}} {{sectionName}} {{/eachSectionRoot}}');
-            template(context).should.equal('');
+            let template = Handlebars.compile('{{#eachSectionRoot sections}} {{sectionName}} {{/eachSectionRoot}}');
+            let renderedHTML = template(context);
+            expect(renderedHTML).toEqual('');
         });
 
         it('should return empty String', function () {
-            var subSections = {
+            let subSections = {
                 level: 1
             };
 
             context['sections'] = subSections;
-            var template = Handlebars.compile('{{#eachSectionRoot sections}} {{sectionName}} {{/eachSectionRoot}}');
-            template(context).should.equal('');
+            let template = Handlebars.compile('{{#eachSectionRoot sections}} {{sectionName}} {{/eachSectionRoot}}');
+            let renderedHTML = template(context);
+            expect(renderedHTML).toEqual('');
         });
 
         it('should return empty String', function () {
-            var emptySections = {
+            let emptySections = {
                 level: 0
             };
             context['sections'] = emptySections;
-            var template = Handlebars.compile('{{#eachSectionRoot sections}} {{sectionName}} {{/eachSectionRoot}}');
-            template(context).should.equal('');
+            let template = Handlebars.compile('{{#eachSectionRoot sections}} {{sectionName}} {{/eachSectionRoot}}');
+            let renderedHTML = template(context);
+            expect(renderedHTML).toEqual('');
         });
 
         it('should return output for 1 subsections', function () {
-            var testSection = {
+            let testSection = {
                 level: 0,
                 index: {
                     level: 1,
@@ -62,12 +65,13 @@ describe('Styleguide Helper Tests', function () {
             };
 
             context['sections'] = testSection;
-            var template = Handlebars.compile('{{#eachSectionRoot sections}}{{sectionName}}, {{sectionDescription}}\n{{/eachSectionRoot}}');
-            template(context).should.equal("Overview, more items\n");
+            let template = Handlebars.compile('{{#eachSectionRoot sections}}{{sectionName}}, {{sectionDescription}}\n{{/eachSectionRoot}}');
+            let renderedHTML = template(context);
+            expect(renderedHTML).toEqual("Overview, more items\n");
         });
 
         it('should return output for 2 subsections', function () {
-            var testSection = {
+            let testSection = {
                 level: 0,
                 index: {
                     level: 1,
@@ -82,8 +86,9 @@ describe('Styleguide Helper Tests', function () {
             };
 
             context['sections'] = testSection;
-            var template = Handlebars.compile('{{#eachSectionRoot sections}}{{sectionName}}, {{sectionDescription}}\n{{/eachSectionRoot}}');
-            template(context).should.equal("Overview, more items\nControls, control items\n");
+            let template = Handlebars.compile('{{#eachSectionRoot sections}}{{sectionName}}, {{sectionDescription}}\n{{/eachSectionRoot}}');
+            let renderedHTML = template(context);
+            expect(renderedHTML).toEqual("Overview, more items\nControls, control items\n");
         });
 
     });
@@ -104,16 +109,16 @@ describe('Styleguide Helper Tests', function () {
      });
 
      it('should return empty String', function () {
-     var template = Handlebars.compile('{{#ifReferenceOfSection notdefined }} true {{/ifReferenceOfSection}}');
-     template(context).should.equal('');
+     let template = Handlebars.compile('{{#ifReferenceOfSection notdefined }} true {{/ifReferenceOfSection}}');
+     let renderedHTML = template(context);         expect(renderedHTML).toEqual('');
      });
 
      it('should return empty String', function () {
 
      context['sectionName'] = 'Overview';
 
-     var template = Handlebars.compile('{{#ifReferenceOfSection sectionName}} true {{/ifReferenceOfSection}}');
-     template(context).should.equal('');
+     let template = Handlebars.compile('{{#ifReferenceOfSection sectionName}} true {{/ifReferenceOfSection}}');
+     let renderedHTML = template(context);         expect(renderedHTML).toEqual('');
      });
      });
      */
@@ -122,7 +127,7 @@ describe('Styleguide Helper Tests', function () {
     describe('{{#eachSubSectionQuery query sections options}} {{/eachSectionQuery}}', function () {
 
         beforeEach(function () {
-            var testSections = {
+            let testSections = {
                 level: 0,
                 index: {
                     level: 1,
@@ -172,32 +177,37 @@ describe('Styleguide Helper Tests', function () {
 
         it('should return empty String', function () {
 
-            var template = Handlebars.compile('{{#eachSubSectionQuery "NamenotInList" sections}} {{sectionName}} {{/eachSubSectionQuery}}');
-            template(context).should.equal("");
+            let template = Handlebars.compile('{{#eachSubSectionQuery "NamenotInList" sections}} {{sectionName}} {{/eachSubSectionQuery}}');
+            let renderedHTML = template(context);
+            expect(renderedHTML).toEqual("");
         });
 
         it('should return empty String', function () {
 
-            var template = Handlebars.compile('{{#eachSubSectionQuery "index" sectionsNotAvailable}} {{sectionName}} {{/eachSubSectionQuery}}');
-            template(context).should.equal("");
+            let template = Handlebars.compile('{{#eachSubSectionQuery "index" sectionsNotAvailable}} {{sectionName}} {{/eachSubSectionQuery}}');
+            let renderedHTML = template(context);
+            expect(renderedHTML).toEqual("");
         });
 
         it('should return Section Overview', function () {
 
-            var template = Handlebars.compile('{{#eachSubSectionQuery "index" sections}} {{sectionName}} {{/eachSubSectionQuery}}');
-            template(context).should.equal(" Overview ");
+            let template = Handlebars.compile('{{#eachSubSectionQuery "index" sections}} {{sectionName}} {{/eachSubSectionQuery}}');
+            let renderedHTML = template(context);
+            expect(renderedHTML).toEqual(" Overview ");
         });
 
         it('should return Font Section with one subsections', function () {
 
-            var template = Handlebars.compile('{{#eachSubSectionQuery "Fonts" sections}} {{sectionName}}\n{{/eachSubSectionQuery}}');
-            template(context).should.equal(" Fonts\n Webfonts\n");
+            let template = Handlebars.compile('{{#eachSubSectionQuery "Fonts" sections}} {{sectionName}}\n{{/eachSubSectionQuery}}');
+            let renderedHTML = template(context);
+            expect(renderedHTML).toEqual(" Fonts\n Webfonts\n");
         });
 
         it('should return Controls Section with all subsections', function () {
 
-            var template = Handlebars.compile('{{#eachSubSectionQuery "Controls" sections}} {{sectionName}}\n{{/eachSubSectionQuery}}');
-            template(context).should.equal(" Controls\n Button\n ButtonSmall\n Dropdown\n");
+            let template = Handlebars.compile('{{#eachSubSectionQuery "Controls" sections}} {{sectionName}}\n{{/eachSubSectionQuery}}');
+            let renderedHTML = template(context);
+            expect(renderedHTML).toEqual(" Controls\n Button\n ButtonSmall\n Dropdown\n");
         });
 
     });
@@ -206,34 +216,37 @@ describe('Styleguide Helper Tests', function () {
 
         it('should return empty string', function () {
 
-            var section = {
+            let section = {
                 level: 0
             };
 
-            var template = Handlebars.compile('{{#ifLevel "0" "1"}} {{sectionName}} {{/ifLevel}}');
-            template(section).should.equal('');
+            let template = Handlebars.compile('{{#ifLevel "0" "1"}} {{sectionName}} {{/ifLevel}}');
+            let renderedHTML = template(section);
+            expect(renderedHTML).toEqual('');
         });
 
         it('should return sectionName', function () {
 
-            var section = {
+            let section = {
                 level: 1,
                 sectionName: "Control"
             };
 
-            var template = Handlebars.compile('{{#ifLevel "1"}} {{sectionName}} {{/ifLevel}}');
-            template(section).should.equal(' Control ');
+            let template = Handlebars.compile('{{#ifLevel "1"}} {{sectionName}} {{/ifLevel}}');
+            let renderedHTML = template(section);
+            expect(renderedHTML).toEqual(' Control ');
         });
 
         it('should return sectionName', function () {
 
-            var section = {
+            let section = {
                 level: 2,
                 sectionName: "Control"
             };
 
-            var template = Handlebars.compile('{{#ifLevel "1" "2"}} {{sectionName}} {{/ifLevel}}');
-            template(section).should.equal(' Control ');
+            let template = Handlebars.compile('{{#ifLevel "1" "2"}} {{sectionName}} {{/ifLevel}}');
+            let renderedHTML = template(section);
+            expect(renderedHTML).toEqual(' Control ');
         });
 
     });
@@ -242,17 +255,19 @@ describe('Styleguide Helper Tests', function () {
 
         it('should return empty String (no context)', function () {
 
-            var template = Handlebars.compile('{{#eachVariation}} {{variationName}} {{/eachVariation}}');
-            template({}).should.equal('');
+            let template = Handlebars.compile('{{#eachVariation}} {{variationName}} {{/eachVariation}}');
+            let renderedHTML = template({});
+            expect(renderedHTML).toEqual('');
         });
 
-        it('should return empty String (no variations in context)', function () {
+        it('should return empty String (no variations in context', function () {
 
-            var template = Handlebars.compile('{{#eachVariation}} {{variationName}} {{/eachVariation}}');
-            template(context).should.equal('');
+            let template = Handlebars.compile('{{#eachVariation}} {{variationName}} {{/eachVariation}}');
+            let renderedHTML = template(context);
+            expect(renderedHTML).toEqual('');
         });
 
-        it('should return one variation)', function () {
+        it('should return one variation', function () {
 
             context['variations'] = [
                 {
@@ -262,30 +277,12 @@ describe('Styleguide Helper Tests', function () {
                 }
             ];
 
-            var template = Handlebars.compile('{{#eachVariation}} {{variationName}},{{variationDescription}},{{variationClass}} {{/eachVariation}}');
-            template(context).should.equal(' .test-class,testmodifier,test-class ');
+            let template = Handlebars.compile('{{#eachVariation}} {{variationName}},{{variationDescription}},{{variationClass}} {{/eachVariation}}');
+            let renderedHTML = template(context);
+            expect(renderedHTML).toEqual(' .test-class,testmodifier,test-class ');
         });
 
-        it('should return two variation)', function () {
-
-            context['variations'] = [
-                {
-                    variationName: ".test-class",
-                    variationDescription: "testmodifier",
-                    variationClass: ["test-class"]
-                },
-                {
-                    variationName: ".test-class2",
-                    variationDescription: "testmodifier2",
-                    variationClass: ["test-class2"]
-                }
-            ];
-
-            var template = Handlebars.compile('{{#eachVariation}} {{variationName}},{{variationDescription}},{{variationClass}}\n {{/eachVariation}}');
-            template(context).should.equal(' .test-class,testmodifier,test-class\n .test-class2,testmodifier2,test-class2\n');
-        });
-
-        it('should return two variation)', function () {
+        it('should return two variation', function () {
 
             context['variations'] = [
                 {
@@ -300,8 +297,9 @@ describe('Styleguide Helper Tests', function () {
                 }
             ];
 
-            var template = Handlebars.compile('{{#eachVariation}} {{variationName}},{{variationDescription}},{{variationClass}}\n {{/eachVariation}}');
-            template(context).should.equal(' .test-class,testmodifier,test-class\n .test-class2,testmodifier2,test-class2\n');
+            let template = Handlebars.compile('{{#eachVariation}} {{variationName}},{{variationDescription}},{{variationClass}}\n {{/eachVariation}}');
+            let renderedHTML = template(context);
+            expect(renderedHTML).toEqual(' .test-class,testmodifier,test-class\n .test-class2,testmodifier2,test-class2\n');
         });
 
     });
