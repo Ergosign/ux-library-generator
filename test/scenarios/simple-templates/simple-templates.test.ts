@@ -1,0 +1,47 @@
+import { startGeneration } from '../../../scripts/uxLibraryGenerator';
+import * as fsExtra from 'fs-extra';
+import { compare, compareSync, Options } from "dir-compare";
+
+// to cope with assemble tests
+jest.useFakeTimers();
+
+describe("generated should match expected", () => {
+
+  beforeAll(() => {
+    startGeneration("test/scenarios/simple-templates/fixture", "styleguide-data/data/site.json");
+  });
+
+
+  it('generated files should exist', function () {
+    expect(fsExtra.existsSync("test/scenarios/simple-templates/.generated")).toBeTruthy();
+  });
+
+  it('files should match expected', function () {
+
+    const path1 = 'test/scenarios/simple-templates/expected';
+    const path2 = 'test/scenarios/simple-templates/.generated';
+    const options: Partial<Options> = { compareSize: true, compareContent: true };
+
+    const states = { 'equal': '==', 'left': '->', 'right': '<-', 'distinct': '<>' };
+
+
+    return compare(path1, path2, options)
+      .then(result => {
+        let differences = '';
+        result.diffSet.forEach(entry => {
+          var state = states[entry.state];
+          var name1 = entry.name1 ? entry.name1 : '';
+          var name2 = entry.name2 ? entry.name2 : '';
+          differences += `${name1}(${entry.type1}) ${state} ${name2}(${entry.type2})\r\n`;
+        });
+        if (result.differences > 0) {
+          console.warn(`Differences: \r\n${differences}`);
+        }
+        expect(result.differences).toBe(0);
+      })
+      .catch(error => {
+        console.error(`Problem with tests: ${error}`);
+      });
+
+  });
+});

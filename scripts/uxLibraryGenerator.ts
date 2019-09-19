@@ -25,6 +25,7 @@ export function startGeneration (projectRootFolder: string, configFilePath: stri
   console.info(colors.green(`Loading partials and layouts...`));
 
   const pathToPartials = siteData.componentPath ? siteData.componentPath + '/**/*.hbs' : null;
+  console.info(`Path to partials: ${pathToPartials}`);
   // configure the partials and layouts
   app.task('load', function (cb) {
     app.data([`${projectRootFolder}/styleguide-data/data/*.json`, './src/html/pages/*.json']);

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Style Guide</title>
+
+  <meta name="description" content="">
+  <meta name="generator" content="kss-node">
+  <meta name="viewport" content="width=device-width">
+
+
+  <link rel="stylesheet" href="css/ergosign-style-guide.css">
+  <!-- bower:css -->
+  <!-- endbower -->
+  <link rel="stylesheet" href="libs/devextreme/css/dx.spa.css" />
+  <link rel="stylesheet" href="libs/devextreme/css/dx.common.css" />
+  <link rel="stylesheet" href="libs/devextreme/css/dx.light.css" />
+
+  <link rel="stylesheet" href="css/documentation.css">
+  <link rel="stylesheet" href="css/styles_bootstrap.css">
+  <link rel="stylesheet" href="css/styles_devextreme.css">
+  <link rel="stylesheet" href="./css/styles.css">
+  <style id="inline-kss-hack"></style>
+  <style id="inline-kss-hack-desktop" media="screen and (min-width: 992px)" type="text/css"></style>
+
+  <!-- These need to be loaded before the examples (and not at the end with bower/wiredep) because the example script needs to access these. -->
+  <script src="libs/jquery/dist/jquery.js"></script>
+  <script src="libs/devextreme/js/dx.all.js"></script>
+</head>
+
+<body class="es-styleguide show-mainnav" id="kss-node">
+  <div class="es-header">
+    <div class="es-header-inner">
+      <div class="es-header-headline">
+        <h2>{{uppercase kss.customerName}} - {{uppercase kss.projectName}}</h2>
+        <h3>Version {{kss.versionNumber}} - {{buildDate}}</h3>
+      </div>
+      <div class="es-header-search-bar-wrapper es-search-collapsed">
+        <div class="es-header-search-bar">
+          <input placeholder="Search in components, descriptions and variations.." class="es-header-search-input">
+        </div>
+        <div class="es-header-search-results-flyout">
+        </div>
+      </div>
+      <div class="es-header-logo-and-search">
+        <div class="es-header-search-bar-container es-search-collapsed">
+          <button class="es-header-search-button">
+            <span class="es-search-search-button es-ico ico-search"></span><span
+              class="es-search-close-button es-ico ico-delete"></span>
+          </button>
+        </div>
+        <div class="es-header-divider"></div>
+        <img src="img/ergosign-logo.svg" class="es-logo" alt="Ergosign Styleguide" title="Ergosign Styleguide" />
+      </div>
+    </div>
+
+    <div class="es-header-color-strip">
+      <div class="es-header-color-strip-yellow"></div>
+      <div class="es-header-color-strip-red"></div>
+      <div class="es-header-color-strip-blue"></div>
+    </div>
+  </div>
+
+  <div class="es-mainnav-wrapper">
+    <ul class="es-mainnav">
+      {{#each navBarItems}}
+        {{#is sectionName 'index'}}
+          <li>
+            <a href="{{sectionName}}.html" class="{{#is sectionName ../../parentSectionName}}es-active-section{{/is}}">
+              <span class="es-mainnav-title">{{sectionTitle}}</span></a>
+          </li>
+      {{else}}
+        <li>
+          <a
+            class="es-mainnav-item {{#is sectionName ../../parentSectionName}}es-active-section {{else}} nav-collapsed {{/is}}">
+            <span class="nav-item-disclosure-icon es-ico ico-disclosuredown"></span>
+            <span class="es-mainnav-title">{{sectionTitle}}</span></a>
+          <ul id="subsection-{{sectionName}}"
+            class="{{#is sectionName ../../parentSectionName}} {{else}}submenu-collapsed{{/is}}">
+            {{#each this.subSections}}
+              <li class="{{#is sectionName ../../../sectionName}}es-active-subsection{{/is}}">
+                <a href="overview-{{sectionName}}.html">
+                  <span class="es-mainnav-subtitle">{{sectionTitle}}</span></a>
+              </li>
+            {{/each}}
+          </ul>
+        </li>
+        {{/is}}
+      {{/each}}
+    </ul>
+  </div>
+
+  <article role="main" class="es-main-content">
+
+    {{#eachSubSectionQuery sectionName subSections}}
+      <div class="es-section-header es-section-header--level-{{level}}">
+
+        <div class="es-section-title">
+          <div class="es-section-anchor" id="{{sectionRef}}"></div>
+          <h{{level}}>{{sectionTitle}}</h{{level}}>
+          {{#ifLevel 2}}
+            {{else}}
+              <a href="#{{sectionRef}}"><span class="es-ico ico-link"></span></a>
+          {{/ifLevel}}
+        </div>
+
+      </div>
+
+      {{#if markup}}
+        <div class="es-section-example">
+          <div>
+            <div class="es-section-markup es-section-markup--collapsed">
+              <div class="es-section-markup-togglebtn">
+                <span class="es-ico ico-disclosuredown"></span>HTML
+              </div>
+
+              <div class="es-section-markup-codebox">
+                <pre class="prettyprint linenums lang-html">
+                  <code data-language="html">{{escapedMarkupWithStyle '[modifier_class]'}}</code>
+                  <div class="es-section-markup-divider"></div>
+                </pre>
+                <button class="codebox-copy-button" data-clipboard-text="{{markupWithStyle '[modifier_class]'}}">
+                  <span class="es-ico ico-copy"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      {{/if}}
+    {{/eachSubSectionQuery}}
+  </article>
+
+  <!-- bower:js -->
+  <!-- endbower -->
+
+  <script src="js/init-uxhub-vanilla.min.js"></script>
+  <script src="js/init-uxhub-bootstrap.min.js"></script>
+  <!--<script src="js/init-uxhub-devextreme.min.js"></script>-->
+
+  <script src="js/init.js"></script>
+
+  <script src="./js/ergosign-style-guide.min.js"></script>
+  <script src="./js/prettify.js"></script>
+
+  <script>
+    prettyPrint();
+  </script>
+
+  {% body %}
+
+  {{{scripts}}}
+</body>
+
+</html>

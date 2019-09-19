@@ -60,6 +60,7 @@
     "ts-jest": "24.0.2",
     "release-it": "12.3.6",
     "tsc": "1.20150623.0",
-    "typescript": "3.5.3"
+    "typescript": "3.5.3",
+    "dir-compare": "1.7.3"
   }
 }
