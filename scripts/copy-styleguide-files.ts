@@ -6,7 +6,34 @@ import { Bundler } from 'scss-bundle';
 
 import { SiteJson } from './typings'
 
-const projectRootFolder = 'example';
+let projectRootFolder = 'example';
+let configFilePath = "styleguide-data/data/site.json"
+const commandLineArguments = process.argv;
+
+commandLineArguments.forEach((argument, index) => {
+
+  switch (argument) {
+    case "--config":
+      //load parameter
+      if (commandLineArguments.length === index) {
+        console.error(`--config parameter provided but no value given`);
+        return;
+      }
+      configFilePath = commandLineArguments[index + 1];
+      console.info(`Using provided config file : ${configFilePath}`);
+      break;
+    case "--rootFolder":
+      //load parameter
+      if (commandLineArguments.length === index) {
+        console.error(`--rootFolder parameter provided but no value given`);
+        return;
+      }
+      projectRootFolder = commandLineArguments[index + 1];
+      console.info(`Using provided project root folder : ${projectRootFolder}`);
+      break;
+  }
+
+});
 
 // copy styleguide data
 fsExtra.copySync('node_modules/ux-library-generator/styleguide-data', '.tmp/styleguide-data');
@@ -18,7 +45,7 @@ if (fsExtra.pathExistsSync('ux-library-config/')) {
     fsExtra.copySync('ux-library-config/', '.tmp/styleguide-data');
 }
 
-const siteData: SiteJson = parseSiteJson(projectRootFolder);
+const siteData: SiteJson = parseSiteJson(projectRootFolder,configFilePath);
 
 if (siteData.assetPath) {
     fsExtra.copySync(siteData.assetPath, '.tmp/styleguide/src/assets');
