@@ -687,4 +687,37 @@ describe("parsing of comments", function () {
         });
 
     });
+
+    describe('a comment in a sub-section', function()
+    {
+        beforeEach(function()
+        {
+            let commentWithDescription = {
+                comment: '/*\nTitle\nA Test Description\n\nangular-markup: test.html\n\nStyleguide testSection.sectionABC \n*/',
+                srcPath: "doesNotExist/pathIsJustForTesting"
+            };
+            createdTestSection = commentsParser.getSectionObjectOfComment(commentWithDescription, sections);
+        });
+
+        it('should have a title', function()
+        {
+            expect(createdTestSection.sectionTitle).toEqual("Title");
+        });
+
+        it('should have a sectionName', function()
+        {
+            expect(createdTestSection.sectionName).toEqual("sectionabc");
+        });
+
+        it('should be level 2', function()
+        {
+            expect(createdTestSection.level).toBe(2);
+        });
+
+        it('should have a description', function()
+        {
+            expect(createdTestSection.description).toEqual("A Test Description");
+        });
+
+    });
 });
