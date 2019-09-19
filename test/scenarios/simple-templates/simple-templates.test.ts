@@ -4,6 +4,7 @@ import { compare, compareSync, Options } from "dir-compare";
 
 // to cope with assemble tests
 jest.useFakeTimers();
+jest.setTimeout(15000);
 
 const generatedFilePath = 'test/scenarios/simple-templates/.generated';
 const expectedPath = 'test/scenarios/simple-templates/expected';
@@ -13,7 +14,7 @@ describe("generated should match expected", () => {
     //remove the files
     fsExtra.removeSync(generatedFilePath);
     //start a generation
-    startGeneration("test/scenarios/simple-templates/fixture", "styleguide-data/data/site.json",done);
+    startGeneration("test/scenarios/simple-templates/fixture", "src/ux-library/ux-library-config.json",done);
   });
 
 

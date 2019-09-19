@@ -28,9 +28,9 @@ export function startGeneration (projectRootFolder: string, configFilePath: stri
   console.info(`Path to partials: ${pathToPartials}`);
   // configure the partials and layouts
   app.task('load', function (cb) {
-    app.data([`${projectRootFolder}/styleguide-data/data/*.json`, './src/html/pages/*.json']);
-    app.partials([`${projectRootFolder}/styleguide-data/partials/*.hbs`, pathToPartials ? pathToPartials : '']);
-    app.layouts([`${projectRootFolder}/styleguide-data/layouts/*.hbs`]);
+    app.data([`${siteData.dataFilesPath}/*.json`, './src/html/pages/*.json']);
+    app.partials([`${siteData.partialsPath}/*.hbs`, pathToPartials ? pathToPartials : '']);
+    app.layouts([`${siteData.layoutsPath}/*.hbs`]);
     cb();
   });
   // Add some logging

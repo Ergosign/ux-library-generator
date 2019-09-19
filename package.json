@@ -9,7 +9,7 @@
   "scripts": {
     "build": "npm run compile-scripts",
     "install-styleguide": "node dist/install-styleguide.js",
-    "test-style-guide-build": "npm run build && node dist/assembleRun.js",
+    "test-style-guide-build": "npm run build && node dist/assembleRun.js --rootFolder example",
     "compile-scripts": "tsc --project tsconfig.scripts.json",
     "test": "jest",
     "test-watch": "jest --watch",

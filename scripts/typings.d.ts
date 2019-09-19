@@ -13,6 +13,9 @@ export interface SiteJson {
   version: string;
   targetPath: string;
   gitlabStemUrl: string;
+  dataFilesPath: string;
+  partialsPath: string;
+  layoutsPath: string;
   examplePagesTargetPath: string;
   examplePagesSourcePath: string;
   overviewMarkdownFile: string;

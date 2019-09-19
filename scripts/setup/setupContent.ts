@@ -46,6 +46,21 @@ export function parseSiteJson (projectRootFolder: string, configFilePath: string
   } else {
     siteJson.examplePagesSourcePath = projectRootFolder + '/' + siteJson.examplePagesSourcePath;
   }
+  if (siteJson.dataFilesPath === undefined) {
+    siteJson.dataFilesPath = `${projectRootFolder}/src/ux-library/data`;
+  } else {
+    siteJson.dataFilesPath = projectRootFolder + '/' + siteJson.dataFilesPath;
+  }
+  if (siteJson.partialsPath === undefined) {
+    siteJson.partialsPath = `${projectRootFolder}/src/ux-library/partials`;
+  } else {
+    siteJson.partialsPath = projectRootFolder + '/' + siteJson.partialsPath;
+  }
+  if (siteJson.layoutsPath === undefined) {
+    siteJson.layoutsPath = `${projectRootFolder}/src/ux-library/layouts`;
+  } else {
+    siteJson.layoutsPath = projectRootFolder + '/' + siteJson.layoutsPath;
+  }
   if (siteJson.examplePagesTargetPath === undefined) {
     siteJson.examplePagesTargetPath = `${projectRootFolder}/www/examples`;
   } else {
