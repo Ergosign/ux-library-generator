@@ -16,16 +16,18 @@ import { Bundler } from 'scss-bundle';
 const helpers = handlebarsHelpers();
 let prettify = require('pretty');
 
+const projectRootFolder = 'example';
+
 const app = assemble();
 
-let siteData = parseSiteJson();
+const siteData = parseSiteJson(projectRootFolder);
 const pathToPartials = siteData.componentPath ? siteData.componentPath + '/**/*.hbs' : null;
 
 // configure the partials and layouts
 app.task('load', function (cb) {
-    app.data(['.tmp/styleguide-data/data/*.json', './src/html/pages/*.json']);
-    app.partials(['.tmp/styleguide-data/partials/*.hbs', pathToPartials ? pathToPartials : '']);
-    app.layouts(['.tmp/styleguide-data/layouts/*.hbs', '.tmp/styleguide-data/partials/*.hbs']);
+    app.data([`${projectRootFolder}/styleguide-data/data/*.json`, './src/html/pages/*.json']);
+    app.partials([`${projectRootFolder}/styleguide-data/partials/*.hbs`, pathToPartials ? pathToPartials : '']);
+    app.layouts([`${projectRootFolder}/styleguide-data/layouts/*.hbs`]);
     cb();
 });
 
@@ -42,48 +44,48 @@ registerHandlebarsHelpersStyleguide(handlebarsEngine);
 app.helper(helpers);
 app.use(baseWatch());
 
-app.asyncHelper('markupWithStyleForCodebox', function (options, cb) {
-    let context = this;
+// app.asyncHelper('markupWithStyleForCodebox', function (options, cb) {
+//     let context = this;
 
-    if (!context || !context.markup) {
-        return '';
-    }
+//     if (!context || !context.markup) {
+//         return '';
+//     }
 
-    let markup = context.markup;
-    let markupContext = context.markupContext;
+//     let markup = context.markup;
+//     let markupContext = context.markupContext;
 
-    let template;
+//     let template;
 
-    if (markup.search(/.*\.hbs/gi) === 0) {
-        let mName = markup.replace(".hbs", "");
-        // we are using the regular handlebars version here, as the engine-handlebars version will
-        // not completely render the partial synchronously and therefore escaping the string is not possible.
-        template = handlebarsEngine.compile(handlebarsEngine.partials[mName]);
-    } else {
-        template = handlebarsEngine.compile(markup);
-    }
+//     if (markup.search(/.*\.hbs/gi) === 0) {
+//         let mName = markup.replace(".hbs", "");
+//         // we are using the regular handlebars version here, as the engine-handlebars version will
+//         // not completely render the partial synchronously and therefore escaping the string is not possible.
+//         template = handlebarsEngine.compile(handlebarsEngine.partials[mName]);
+//     } else {
+//         template = handlebarsEngine.compile(markup);
+//     }
 
-    console.log('now rendering:');
-    let renderResult = app.engine('.hbs')
-        .render(template, markupContext);
+//     console.log('now rendering:');
+//     let renderResult = app.engine('.hbs')
+//         .render(template, markupContext);
 
-    console.log(renderResult);
-    cb(null, handlebarsEngine.Utils.escapeExpression(prettify(renderResult.trim())));
+//     console.log(renderResult);
+//     cb(null, handlebarsEngine.Utils.escapeExpression(prettify(renderResult.trim())));
 
-    // let html = app.engine.renderSync(template, markupContext);
-    // html = handlebarsEngine.Utils.escapeExpression(prettify(html));
-    //
-    // return html;
-});
+//     // let html = app.engine.renderSync(template, markupContext);
+//     // html = handlebarsEngine.Utils.escapeExpression(prettify(html));
+//     //
+//     // return html;
+// });
 
 app.create('uxLibraryElements', {
     engine: app.options.engine || 'hbs'
 });
 
 // configure the build
-app.task('default', function () {
+app.task('default',['load'], function () {
 
-    siteData = setupContent(app);
+    setupContent(app,projectRootFolder);
     const returnValue = app.toStream('uxLibraryElements')
         .pipe(app.renderFile())
         .pipe(app.dest('./'));
@@ -104,14 +106,13 @@ app.task('buildPages', function () {
 });
 
 app.task('bundleScss', ['load'], function () {
-    siteData = parseSiteJson();
     if (siteData.scssPath) {
         let files = fsExtra.readdirSync(siteData.scssPath);
         let bundler = new Bundler();
         files.forEach(value => {
             bundler.bundle(siteData.scssPath + '/' + value, undefined, undefined, files)
                 .then(bundle => {
-                    fsExtra.writeFileSync('.tmp/styleguide/src/assets/scss/' + value, bundle.bundledContent);
+                    fsExtra.writeFileSync(`${projectRootFolder}/.tmp/styleguide/src/assets/scss/${value}`, bundle.bundledContent);
                 })
         });
     }
@@ -123,13 +124,13 @@ app.task('bundleScss', ['load'], function () {
 //     }
 // });
 
-app.build(['load', 'default', 'buildPages'], function (err) {
+app.build(['default'], function (err) {
     if (err) {
         console.error('ERROR:', err);
     }
 });
 
-const commandLineArguments = process.argv;
+// const commandLineArguments = process.argv;
 
 // if (commandLineArguments[2] === 'watch') {
 //     app.task('watch', function () {

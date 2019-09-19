@@ -1,8 +1,12 @@
 #!/usr/bin/env node
 
 import * as fsExtra from 'fs-extra';
-import { parseSiteJson, SiteJson } from "./setup/setupContent";
+import { parseSiteJson } from "./setup/setupContent";
 import { Bundler } from 'scss-bundle';
+
+import { SiteJson } from './typings'
+
+const projectRootFolder = 'example';
 
 // copy styleguide data
 fsExtra.copySync('node_modules/ux-library-generator/styleguide-data', '.tmp/styleguide-data');
@@ -14,7 +18,7 @@ if (fsExtra.pathExistsSync('ux-library-config/')) {
     fsExtra.copySync('ux-library-config/', '.tmp/styleguide-data');
 }
 
-const siteData: SiteJson = parseSiteJson();
+const siteData: SiteJson = parseSiteJson(projectRootFolder);
 
 if (siteData.assetPath) {
     fsExtra.copySync(siteData.assetPath, '.tmp/styleguide/src/assets');

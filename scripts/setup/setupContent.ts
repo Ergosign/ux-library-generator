@@ -1,5 +1,7 @@
 import Assemble from 'assemble';
 
+import { SiteJson, Section } from '../typings'
+
 const _ = require('lodash');
 import * as fs from 'fs';
 import * as fsExtra from 'fs-extra';
@@ -7,26 +9,8 @@ import * as fsExtra from 'fs-extra';
 import { findCommentsInDirectory } from '../finderParser/commentsFinder';
 import { convertKccCommentsToSectionObjects } from '../finderParser/commentsParser';
 
-export interface SiteJson {
-    title: string;
-    version: string;
-    targetPath: string;
-    gitlabStemUrl: string;
-    examplePagesTargetPath: string;
-    examplePagesSourcePath: string;
-    overviewMarkdownFile: string;
-    assetPath: string;
-    imagePath: string;
-    scssPath: string;
-    componentPath: string;
-    templateName: string;
-    templateNameIframe: string;
-    alternativeTemplateNameIframe: string;
-    alternative2TemplateNameIframe: string;
-}
-
-export function parseSiteJson(): SiteJson {
-    const siteFileContents = fs.readFileSync('.tmp/styleguide-data/data/site.json');
+export function parseSiteJson(projectRootFolder: string): SiteJson {
+    const siteFileContents = fs.readFileSync(`${projectRootFolder}/styleguide-data/data/site.json`);
     const siteJson: SiteJson = JSON.parse(siteFileContents.toString());
 
     // set default values
@@ -36,44 +20,47 @@ export function parseSiteJson(): SiteJson {
     if (siteJson.version === undefined) {
         siteJson.version = '1.0';
     }
+    if (siteJson.scssPath === undefined) {
+        siteJson.scssPath = `${projectRootFolder}/src/scss`;
+    } else {
+        siteJson.scssPath = projectRootFolder + '/' + siteJson.scssPath;
+    }
     if (siteJson.overviewMarkdownFile === undefined) {
         siteJson.overviewMarkdownFile = siteJson.scssPath + '/documentation/styleguide.md';
     }
     if (siteJson.targetPath === undefined) {
-        siteJson.targetPath = 'www/styleguide';
+        siteJson.targetPath = `${projectRootFolder}/www/styleguide`;
+    } else {
+        siteJson.targetPath = projectRootFolder + '/' + siteJson.targetPath;
     }
     if (siteJson.examplePagesSourcePath === undefined) {
-        siteJson.examplePagesSourcePath = 'src/html/pages';
+        siteJson.examplePagesSourcePath = `${projectRootFolder}/src/html/pages`;
+    } else {
+        siteJson.examplePagesSourcePath = projectRootFolder + '/' + siteJson.examplePagesSourcePath;
     }
     if (siteJson.examplePagesTargetPath === undefined) {
-        siteJson.examplePagesTargetPath = 'www/examples';
+        siteJson.examplePagesTargetPath = `${projectRootFolder}/www/examples`;
+    } else {
+        siteJson.examplePagesTargetPath = projectRootFolder + '/' + siteJson.examplePagesTargetPath;
     }
     if (siteJson.assetPath === undefined) {
-        siteJson.assetPath = 'src/assets';
+        siteJson.assetPath = `${projectRootFolder}/src/assets`;
+    } else {
+        siteJson.assetPath = projectRootFolder + '/' + siteJson.assetPath;
     }
     if (siteJson.imagePath === undefined) {
-        siteJson.imagePath = 'src/img';
+        siteJson.imagePath = `${projectRootFolder}/src/img`;
+    } else {
+        siteJson.imagePath = projectRootFolder + '/' + siteJson.imagePath;
     }
-    if (siteJson.scssPath === undefined) {
-        siteJson.scssPath = 'src/scss';
-    }
+
     if (siteJson.componentPath === undefined) {
-        siteJson.componentPath = 'src/scss/init-uxhub';
+        siteJson.componentPath = `${projectRootFolder}/src/scss`;
+    } else {
+        siteJson.componentPath = projectRootFolder + '/' + siteJson.componentPath;
     }
     if (siteJson.templateName === undefined) {
         siteJson.templateName = 'style-guide-layout.hbs';
-    }
-    if (siteJson.templateNameIframe === undefined) {
-        siteJson.templateNameIframe = 'iframe-content.hbs';
-    }
-    if (siteJson.alternativeTemplateNameIframe === undefined) {
-        siteJson.alternativeTemplateNameIframe = 'alternative-iframe-content.hbs';
-    }
-    if (siteJson.templateNameIframe === undefined) {
-        siteJson.templateNameIframe = 'iframe-content.hbs';
-    }
-    if (siteJson.alternative2TemplateNameIframe === undefined) {
-        siteJson.alternative2TemplateNameIframe = 'alternative-iframe-content2.hbs';
     }
     if (siteJson.gitlabStemUrl === undefined) {
         siteJson.gitlabStemUrl = 'Please set gitlabStemUrl in site.json';
@@ -82,10 +69,10 @@ export function parseSiteJson(): SiteJson {
     return siteJson;
 }
 
-export function setupContent(app: Assemble): SiteJson {
+export function setupContent(app: Assemble,projectRootFolder: string): SiteJson {
 
     // generating file for search
-    const siteData: SiteJson = parseSiteJson();
+    const siteData: SiteJson = parseSiteJson(projectRootFolder);
 
     const componentPath = siteData.componentPath;
 
@@ -94,10 +81,10 @@ export function setupContent(app: Assemble): SiteJson {
     let uxSections = convertKccCommentsToSectionObjects(foundComments);
 
     let overviewMarkdownFile = siteData.overviewMarkdownFile;
-    let sections = {};
+    let sections: Map<string, Section> = new Map();
 
     // in addition to the pages generated from the KSS comments create an index / overview page
-    let indexPage = {
+    let indexPage : Section = {
         sectionName: "index",
         sectionTitle: "Overview",
         description: "No overview Markdown file found",
@@ -166,7 +153,7 @@ export function getListOfNavBarItems(sections) {
             for (let subSectionKey in section) {
                 let subSection = section[subSectionKey];
 
-                if (isSection(subSection) && subSection.level === 2) {
+                if (subSection != null && isSection(subSection) && subSection.level === 2) {
                     let secondLevelNavItem = {
                         sectionName: subSection.sectionName,
                         sectionTitle: subSection.sectionTitle,
@@ -226,10 +213,10 @@ export function createHtmlFileForSection(sectionData, sectionName, navBarItems, 
         filePath = '/' + sectionName.toLowerCase() + '.html';
     }
 
-    let buildDate = formattedDateAsString(new Date());
+    const buildDate = formattedDateAsString(new Date());
 
-    let indexPageTemplateName = siteData.templateName;
-    let currentPage = {
+    const indexPageTemplateName = siteData.templateName;
+    const currentPage = {
         data: {
             layout: indexPageTemplateName,
             navBarItems: null,
@@ -255,7 +242,7 @@ export function createHtmlFileForSection(sectionData, sectionName, navBarItems, 
     if (fs.existsSync(currentPage.dest) && currentPage.data.srcPath && fs.existsSync(currentPage.data.srcPath)) {
         let sourceStats = fs.statSync(currentPage.data.srcPath);
         let destStats = fs.statSync(currentPage.dest);
-        if (sourceStats.mtime <= destStats.mtime) {
+        if (siteData.enableDeltaUpdates && sourceStats.mtime <= destStats.mtime) {
             generate = false;
         }
     }
@@ -264,7 +251,8 @@ export function createHtmlFileForSection(sectionData, sectionName, navBarItems, 
     if (generate) {
         app.uxLibraryElement(currentPage.dest, {
                 content: '',
-                data: currentPage.data
+                data: currentPage.data,
+                page: currentPage.data
             }
         );
 

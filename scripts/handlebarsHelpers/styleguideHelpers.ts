@@ -115,7 +115,7 @@ export function registerHandlebarsHelpersStyleguide(Handlebars) {
                     for (subSectionKey in sections) {
                         subSection = sections[subSectionKey];
 
-                        if (typeof (subSection) === 'object') {
+                        if (subSection && typeof (subSection) === 'object') {
                             // ad all subsections
                             buffer += _loopSubSection(subSection.sectionName, subSection, options);
                         }
