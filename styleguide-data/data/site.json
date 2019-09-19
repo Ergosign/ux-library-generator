@@ -1,8 +1,0 @@
-{
-  "title":"UX Library Documentation",
-  "targetPath":".tmp/styleguide/src/app/",
-  "assetPath": "src/assets",
-  "imagePath": "src/assets/img",
-  "scssPath": "src/assets/scss",
-  "componentPath": "src/app/components"
-}

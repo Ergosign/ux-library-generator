@@ -1,0 +1,9 @@
+{
+  "title":"UX Library Documentation",
+  "targetPath":".tmp/www",
+  "assetPath": "src/assets",
+  "imagePath": "src/assets/img",
+  "scssPath": "src/scss",
+  "componentPath": "src/scss",
+  "enableDeltaUpdates" : false
+}
