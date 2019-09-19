@@ -33,4 +33,6 @@ commandLineArguments.forEach((argument, index) => {
 });
 
 console.info(colors.green(`Starting Generator....`));
-startGeneration(projectRootFolder,configFilePath);
+startGeneration(projectRootFolder, configFilePath, () => {
+  console.info(colors.green(`Generation complete`));
+});

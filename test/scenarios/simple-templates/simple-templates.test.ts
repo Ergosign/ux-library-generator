@@ -5,27 +5,27 @@ import { compare, compareSync, Options } from "dir-compare";
 // to cope with assemble tests
 jest.useFakeTimers();
 
+const generatedFilePath = 'test/scenarios/simple-templates/.generated';
+const expectedPath = 'test/scenarios/simple-templates/expected';
 describe("generated should match expected", () => {
 
-  beforeAll(() => {
-    startGeneration("test/scenarios/simple-templates/fixture", "styleguide-data/data/site.json");
+  beforeAll(done => {
+    //remove the files
+    fsExtra.removeSync(generatedFilePath);
+    //start a generation
+    startGeneration("test/scenarios/simple-templates/fixture", "styleguide-data/data/site.json",done);
   });
 
 
   it('generated files should exist', function () {
-    expect(fsExtra.existsSync("test/scenarios/simple-templates/.generated")).toBeTruthy();
+    expect(fsExtra.existsSync(generatedFilePath)).toBeTruthy();
   });
 
   it('files should match expected', function () {
 
-    const path1 = 'test/scenarios/simple-templates/expected';
-    const path2 = 'test/scenarios/simple-templates/.generated';
     const options: Partial<Options> = { compareSize: true, compareContent: true };
-
     const states = { 'equal': '==', 'left': '->', 'right': '<-', 'distinct': '<>' };
-
-
-    return compare(path1, path2, options)
+    return compare(expectedPath, generatedFilePath, options)
       .then(result => {
         let differences = '';
         result.diffSet.forEach(entry => {

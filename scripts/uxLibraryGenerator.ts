@@ -18,7 +18,7 @@ const helpers = handlebarsHelpers();
 
 const app = assemble();
 
-export function startGeneration (projectRootFolder: string, configFilePath: string) {
+export function startGeneration (projectRootFolder: string, configFilePath: string, done: () => void) {
   //load the data
   const siteData = parseSiteJson(projectRootFolder, configFilePath);
 
@@ -90,6 +90,7 @@ export function startGeneration (projectRootFolder: string, configFilePath: stri
     if (err) {
       console.error('ERROR:', err);
     }
+    done();
   });
 
 }
