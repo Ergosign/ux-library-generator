@@ -3,7 +3,7 @@
 import { startGeneration } from './uxLibraryGenerator';
 import * as colors from 'colors/safe';
 
-let projectRootFolder = './';
+let projectRootFolder = '.';
 let configFilePath = "src/ux-library/ux-library-config.json"
 const commandLineArguments = process.argv;
 
