@@ -2,7 +2,6 @@
 import replaceInFile from 'replace-in-file';
 import * as fs from 'fs';
 
-
 const commandLineArguments = process.argv;
 
 let targetPath = commandLineArguments[2];
@@ -33,8 +32,8 @@ const dateString = '' + day + '.' + month + '.' + year + ' - ' + hour + ':' + mi
 console.log('New Date String:', dateString);
 const options = {
   files: [
-    targetPath+ '/environment.prod.ts',
-    targetPath+ '/environment.ts'
+    targetPath + '/environment.prod.ts',
+    targetPath + '/environment.ts'
   ],
   from: /productionDate: '(.*)'/g,
   to: 'productionDate: \'' + dateString + '\'',
@@ -50,14 +49,15 @@ try {
 const packageJsonPath = process.cwd() + '/package.json';
 
 if (fs.existsSync(packageJsonPath)) {
+  // tslint:disable-next-line:no-var-requires
   const packageDetails = require(packageJsonPath);
   console.log('Version from Package File: ' + packageDetails.version);
   const versionSource = 'export const APP_VERSION = \'' + packageDetails.version + '\';\n';
-  fs.writeFile( targetPath+ '/version.ts', versionSource, function (err) {
+  fs.writeFile( targetPath + '/version.ts', versionSource, (err) => {
     if (err) {
       return console.log(err);
     }
-    console.log("The version file was updated.");
+    console.log('The version file was updated.');
   });
 } else {
   console.log('No package.json found - can set version information.');

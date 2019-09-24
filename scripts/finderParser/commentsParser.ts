@@ -1,11 +1,11 @@
-import * as path from 'path';
+import { join } from 'path';
 import * as fs from 'fs';
 
 const sectionRegex = /styleguide\s.*(?=\n)/i;
 const startCommentRegex = /\/\*.*\n?/;
 const endCommentRegex = /\n\*\/.*\n?/;
 
-export function addSubSectionsToObject (subSections, parentSection, pathToRootSection, baseHtmlFileName, sectionRefs) {
+export function addSubSectionsToObject(subSections, parentSection, pathToRootSection, baseHtmlFileName, sectionRefs) {
   if (pathToRootSection === null || pathToRootSection === undefined) {
     pathToRootSection = '';
   }
@@ -18,7 +18,7 @@ export function addSubSectionsToObject (subSections, parentSection, pathToRootSe
   if (/Hack/.test(subSections[0].trim())) {
     return;
   }
-  //check that the section name is valid
+  // check that the section name is valid
   if (subSections[0].length === 0 || subSections[0] === '') {
     return parentSection;
   }
@@ -33,10 +33,10 @@ export function addSubSectionsToObject (subSections, parentSection, pathToRootSe
   // the name of the current section
   // e.g. when the path is: some.path.xyz
   // then the currentName is 'some'
-  let currentSectionName = subSections[0].trim();
+  const currentSectionName = subSections[0].trim();
 
   // replace whitespace in file names with a dash
-  let currentSectionNameWithoutWhitespace = currentSectionName.replace(/ /g, '-');
+  const currentSectionNameWithoutWhitespace = currentSectionName.replace(/ /g, '-');
 
   if (parentSection.level === 1) {
     if (baseHtmlFileName === null || baseHtmlFileName === undefined) {
@@ -44,7 +44,7 @@ export function addSubSectionsToObject (subSections, parentSection, pathToRootSe
     }
   }
 
-  //check if this section name already exists before creating
+  // check if this section name already exists before creating
   if (!parentSection[subSections[0]]) {
     let htmlFilePath;
     let alternativeHtmlFilePath;
@@ -54,8 +54,8 @@ export function addSubSectionsToObject (subSections, parentSection, pathToRootSe
 
     // create a unique identifier for the section. This is possible by appending the names of all
     // parent sections plus the name of the current section.
-    for (let i = 0; i < sectionRefs.length; i++) {
-      sectionRef = sectionRef + '-' + sectionRefs[i].trim()
+    for (const eachSectionRef of sectionRefs) {
+      sectionRef = sectionRef + '-' + eachSectionRef.trim()
         .replace(/ /g, '-')
         .toLowerCase();
     }
@@ -87,7 +87,7 @@ export function addSubSectionsToObject (subSections, parentSection, pathToRootSe
       alternativeHtmlFile: alternativeHtmlFilePath,
       alternative2HtmlFile: alternative2HtmlFilePath,
       sectionLocation: sectionRefs,
-      sectionRef: sectionRef,
+      sectionRef,
       destPath: destinationPath
     };
     parentSection[currentSectionName] = newSection;
@@ -108,15 +108,15 @@ export function addSubSectionsToObject (subSections, parentSection, pathToRootSe
     pathToRootSection = pathToRootSection + '_' + currentSectionNameWithoutWhitespace;
   }
 
-  //load this section
-  let currentSection = parentSection[currentSectionName];
-  //go deeper if required
+  // load this section
+  const currentSection = parentSection[currentSectionName];
+  // go deeper if required
   if (subSections.length > 1) {
-    let remainingSections = subSections.slice(1);
+    const remainingSections = subSections.slice(1);
     return addSubSectionsToObject(remainingSections, currentSection, pathToRootSection, baseHtmlFileName, sectionRefs);
   }
 
-  //return this section if there are no children.
+  // return this section if there are no children.
   return currentSection;
 }
 
@@ -125,11 +125,11 @@ export function addSubSectionsToObject (subSections, parentSection, pathToRootSe
  * @param: variations array with string
  * @return Array object {name, description}
  */
-export function splitvariations (variations) {
+export function splitvariations(variations) {
 
   const returnArray = [];
 
-  variations.forEach(function (variation) {
+  variations.forEach((variation) => {
 
     let vName;
     let vDescription;
@@ -173,9 +173,9 @@ export function splitvariations (variations) {
 /**
  * split property line into property object of
  * propertyName
- * propertyValue or propertyValues as [] sperated by ,
+ * propertyValue or propertyValues as [] separated by ,
  */
-export function addPropertyObject (el, properties) {
+export function addPropertyObject(el, properties) {
 
   const nameValue = el.split(':');
 
@@ -197,7 +197,7 @@ export function addPropertyObject (el, properties) {
   }
 }
 
-function _getJSOJNPath (markup, srcPath) {
+function _getJSONPath(markup, srcPath) {
 
   let mName = markup.split('.')
     .slice(0, -1)
@@ -207,17 +207,17 @@ function _getJSOJNPath (markup, srcPath) {
   // const path = dirname + "/" + mName + ".json";
   mName += '.json';
 
-  return path.join(dirname, mName);
+  return join(dirname, mName);
 }
 
-function cleanUpComment (inputComment) {
+function cleanUpComment(inputComment) {
   let outputComment = inputComment;
   outputComment = outputComment.replace(startCommentRegex, '');
   outputComment = outputComment.replace(endCommentRegex, '');
   return outputComment;
 }
 
-export function getSectionObjectOfComment (cssCommentPathObject, sections) {
+export function getSectionObjectOfComment(cssCommentPathObject, sections) {
 
   let cssComment = cssCommentPathObject.comment;
   const srcPath = cssCommentPathObject.srcPath;
@@ -228,16 +228,16 @@ export function getSectionObjectOfComment (cssCommentPathObject, sections) {
     // strip out the start and end comment markers
     cssComment = cleanUpComment(cssComment);
 
-    //put the comment lines in an array
-    let cssLines = cssComment.split("\n");
+    // put the comment lines in an array
+    let cssLines = cssComment.split('\n');
 
-    //use last line as the style information and remove from the array
+    // use last line as the style information and remove from the array
     let sectionData = cssLines.pop();
-    sectionData = sectionData.replace(/styleguide\s/i, "")
+    sectionData = sectionData.replace(/styleguide\s/i, '')
       .toLowerCase();
 
-    //create a section object and any required parent objects
-    let sectionObject = addSubSectionsToObject(sectionData.split("."), sections, null, null, null);
+    // create a section object and any required parent objects
+    const sectionObject = addSubSectionsToObject(sectionData.split('.'), sections, null, null, null);
 
     // if a section can't be created from this comment then it will be null - therefore skip this comment
     if (!sectionObject) {
@@ -246,8 +246,8 @@ export function getSectionObjectOfComment (cssCommentPathObject, sections) {
     // set the source path
     sectionObject.srcPath = srcPath;
 
-    //take the title from the first line and removes from array
-    let sectionTitle = cssLines.shift()
+    // take the title from the first line and removes from array
+    const sectionTitle = cssLines.shift()
       .trim();
     sectionObject.sectionTitle = sectionTitle;
 
@@ -256,7 +256,7 @@ export function getSectionObjectOfComment (cssCommentPathObject, sections) {
       return sectionObject;
     }
 
-    //remove empty first and last lines
+    // remove empty first and last lines
     if (cssLines[0].length === 0) {
       cssLines.shift();
     }
@@ -266,8 +266,8 @@ export function getSectionObjectOfComment (cssCommentPathObject, sections) {
 
     // check if the comment contains markup
     let markupCommentIndex = -1;
-    let commentContainsMarkup = cssLines.some(function (element, index) {
-      let markupTest = new RegExp("markup:", "i").test(element);
+    const commentContainsMarkup = cssLines.some((element, index) => {
+      const markupTest = new RegExp('markup:', 'i').test(element);
       if (markupTest) {
         markupCommentIndex = index;
         return true;
@@ -275,11 +275,10 @@ export function getSectionObjectOfComment (cssCommentPathObject, sections) {
       return false;
     });
 
-
     // check if the comment contains alternative markup
     let alternativeMarkup;
-    let commentContainsAlternativeMarkup = cssLines.some(function (element, index) {
-      let alternativeMarkupTest = new RegExp("alternative-markup:", "i").test(element);
+    const commentContainsAlternativeMarkup = cssLines.some((element, index) => {
+      const alternativeMarkupTest = new RegExp('alternative-markup:', 'i').test(element);
       if (alternativeMarkupTest) {
         alternativeMarkup = element;
         return true;
@@ -287,8 +286,8 @@ export function getSectionObjectOfComment (cssCommentPathObject, sections) {
       return false;
     });
     let alternativeScss;
-    let commentContainsAlternativeScss = cssLines.some(function (element, index) {
-      let alternativeScssTest = new RegExp("alternative-scss-file:", "i").test(element);
+    const commentContainsAlternativeScss = cssLines.some((element, index) => {
+      const alternativeScssTest = new RegExp('alternative-scss-file:', 'i').test(element);
       if (alternativeScssTest) {
         alternativeScss = element.replace(/alternative-scss-file:/i, '')
           .trim();
@@ -297,13 +296,13 @@ export function getSectionObjectOfComment (cssCommentPathObject, sections) {
       return false;
     });
     if (commentContainsAlternativeScss && alternativeScss) {
-      let alternativeSrcPath = srcPath.substring(0, srcPath.lastIndexOf("/") + 1);
+      const alternativeSrcPath = srcPath.substring(0, srcPath.lastIndexOf('/') + 1);
       sectionObject.alternativeSrcPath = alternativeSrcPath + alternativeScss;
     }
 
     let alternative2Markup;
-    let commentContainsAlternative2Markup = cssLines.some(function (element, index) {
-      let alternative2MarkupTest = new RegExp("alternative2-markup:", "i").test(element);
+    const commentContainsAlternative2Markup = cssLines.some((element, index) => {
+      const alternative2MarkupTest = new RegExp('alternative2-markup:', 'i').test(element);
       if (alternative2MarkupTest) {
         alternative2Markup = element;
         return true;
@@ -311,8 +310,8 @@ export function getSectionObjectOfComment (cssCommentPathObject, sections) {
       return false;
     });
     let alternative2Scss;
-    let commentContainsAlternative2Scss = cssLines.some(function (element, index) {
-      let alternative2ScssTest = new RegExp("alternative2-scss-file:", "i").test(element);
+    const commentContainsAlternative2Scss = cssLines.some((element, index) => {
+      const alternative2ScssTest = new RegExp('alternative2-scss-file:', 'i').test(element);
       if (alternative2ScssTest) {
         alternative2Scss = element.replace(/alternative2-scss-file:/i, '').trim();
         return true;
@@ -320,32 +319,32 @@ export function getSectionObjectOfComment (cssCommentPathObject, sections) {
       return false;
     });
     if (commentContainsAlternative2Scss && alternative2Scss) {
-      let alternative2SrcPath = srcPath.substring(0, srcPath.lastIndexOf("/") + 1);
+      const alternative2SrcPath = srcPath.substring(0, srcPath.lastIndexOf('/') + 1);
       sectionObject.alternative2SrcPath = alternative2SrcPath + alternative2Scss;
     }
 
-    //get the description and remove from the lines
-    let descriptionLines = []; //cssLines;
+    // get the description and remove from the lines
+    let descriptionLines = []; // cssLines;
     let descriptionString = '';
     if (commentContainsMarkup) {
       descriptionLines = cssLines.slice(0, markupCommentIndex);
       cssLines = cssLines.slice(markupCommentIndex);
-      descriptionString = descriptionLines.join('  \n');//2 spaces for a markdown new line ;-)
+      descriptionString = descriptionLines.join('  \n'); // 2 spaces for a markdown new line ;-)
       descriptionString = descriptionString.replace(/^\s+|\s+$/g, '');
-      if (descriptionString !== "") {
+      if (descriptionString !== '') {
         sectionObject.description = descriptionString.trim();
       }
     }
 
     /**
      * variations block
-     * **/
+     */
     // check if variations are available (start with .)
     // get variations
     let variationsIndexStart = -1;
     let variationsIndexEnd = -1;
-    let variations = [];
-    let commentContainsvariations = cssLines.some(function (element, index, array) {
+    const variations = [];
+    const commentContainsvariations = cssLines.some((element, index, array) => {
       if (element.search(/^(\.|\:)\w+/i) === 0) {   /* ^\..* */
         // found variations start
         if (variationsIndexStart === -1) {
@@ -368,9 +367,9 @@ export function getSectionObjectOfComment (cssCommentPathObject, sections) {
     // remove variations if available
     // leave properties below variations in cssLines
     if (commentContainsvariations) {
-      //TODO if variations without markup are allowed: descriptionLines = cssLines.slice(0, variationsIndexStart);
+      // TODO if variations without markup are allowed: descriptionLines = cssLines.slice(0, variationsIndexStart);
 
-      //let variationLines = cssLines.slice(variationIndexStart, variationIndexEnd);
+      // let variationLines = cssLines.slice(variationIndexStart, variationIndexEnd);
       markupLines = cssLines.slice(0, variationsIndexStart);
 
       cssLines = cssLines.slice(variationsIndexEnd + 1);
@@ -379,13 +378,13 @@ export function getSectionObjectOfComment (cssCommentPathObject, sections) {
 
     /**
      * properties block
-     * **/
-    //load further properties
+     */
+    // load further properties
     // check if line starts with 'propertyName:' (but not 'Markup:', 'Angular-Markup:)
     let propertiesIndexStart = -1;
     let propertiesIndexEnd = -1;
-    let properties = {};
-    let commentContainsProperties = cssLines.some(function (el, ind, ar) {
+    const properties = {};
+    const commentContainsProperties = cssLines.some((el, ind, ar) => {
       if (el.search(/^([a-zA-Z0-9_-]+(?=:))(?!::)/gi) === 0) {
         if (el.search(/Markup:/i) !== 0 && el.search(/Angular-Markup:/i) !== 0) {
           if (propertiesIndexStart === -1) {
@@ -407,7 +406,7 @@ export function getSectionObjectOfComment (cssCommentPathObject, sections) {
         descriptionLines = cssLines.slice(0, propertiesIndexStart);
         descriptionString = descriptionLines.join('  \n');
         descriptionString = descriptionString.replace(/^\s+|\s+$/g, '');
-        if (descriptionString !== "") {
+        if (descriptionString !== '') {
           sectionObject.description = descriptionString.trim();
         }
 
@@ -424,24 +423,30 @@ export function getSectionObjectOfComment (cssCommentPathObject, sections) {
       // no properties and no markup but description
       descriptionLines = cssLines;
       descriptionString = descriptionLines.join('  \n');
-      if (descriptionString !== "") {
+      if (descriptionString !== '') {
         sectionObject.description = descriptionString.trim();
       }
       cssLines = [];
     }
 
-    //load the markup
+    // load the markup
     if (!markupLines) {
       markupLines = cssLines;
     }
-    let markup = markupLines.join("\n");
+    let markup = markupLines.join('\n');
 
-    //test if markup is available
-    let markupAvailable = new RegExp("^\s*Markup:\s*", "i").test(markup);
+    // test if markup is available
+    const markupAvailable = new RegExp('^\s*Markup:\s*', 'i').test(markup);
 
-    let path, data, alternativePath, alternativeData, alternative2Path, alternative2Data;
+    let markdownPath;
+    let data;
+    let alternativePath;
+    let alternativeData;
+    let alternative2Path;
+    let alternative2Data;
     let jsonFileName;
-    let alternativeJsonFileName, alternative2JsonFileName;
+    let alternativeJsonFileName;
+    let alternative2JsonFileName;
     if (sectionObject.properties && sectionObject.properties['json-file'] && sectionObject.properties['json-file'][0]) {
       jsonFileName = sectionObject.properties['json-file'][0];
     }
@@ -452,35 +457,35 @@ export function getSectionObjectOfComment (cssCommentPathObject, sections) {
       alternative2JsonFileName = sectionObject.properties['alternative2-json-file'][0];
     }
     if (markupAvailable) {
-      markup = markup.replace(/^\s*Markup:\s*/i, "");
+      markup = markup.replace(/^\s*Markup:\s*/i, '');
       sectionObject.markup = markup.trim();
 
       // if markup from hbs file add data context if available
       if (markup.search(/.*\.hbs/gi) === 0) {
 
-        //let mName = markup.replace(/\.hbs\s*/i, ""); // remove extension
-        //mName = mName.replace(/\./, "-");  // remove dots
-        //mName = mName.replace(/\s*/, "");   //  remove spaces
-        //let dirname = srcPath.match(/(.*)[\/\\]/)[1] || '';
-        //let path = dirname + "/" + mName + ".json";
-        //path = path.trim();
+        // let mName = markup.replace(/\.hbs\s*/i, ""); // remove extension
+        // mName = mName.replace(/\./, "-");  // remove dots
+        // mName = mName.replace(/\s*/, "");   //  remove spaces
+        // let dirname = srcPath.match(/(.*)[\/\\]/)[1] || '';
+        // let path = dirname + "/" + mName + ".json";
+        // path = trim();
 
         // use json file specified by json-file
         if (jsonFileName) {
-          path = _getJSOJNPath(jsonFileName, srcPath);
+          markdownPath = _getJSONPath(jsonFileName, srcPath);
         } else {
-          path = _getJSOJNPath(markup, srcPath);
+          markdownPath = _getJSONPath(markup, srcPath);
         }
-        if (fs.existsSync(path)) {
+        if (fs.existsSync(markdownPath)) {
           try {
-            const fileContents = fs.readFileSync(path);
+            const fileContents = fs.readFileSync(markdownPath);
             data = JSON.parse(fileContents.toString());
 
             // webfont hack
-            if (data.hasOwnProperty("cssTemplate") &&
-              data.hasOwnProperty("fontBaseName") &&
-              (data.hasOwnProperty("engine") && data.engine === "fontforge") &&
-              data.cssTemplate.hasOwnProperty("template")) {
+            if (data.hasOwnProperty('cssTemplate') &&
+              data.hasOwnProperty('fontBaseName') &&
+              (data.hasOwnProperty('engine') && data.engine === 'fontforge') &&
+              data.cssTemplate.hasOwnProperty('template')) {
               delete data.cssTemplate.template;
             }
             if (data) {
@@ -488,14 +493,14 @@ export function getSectionObjectOfComment (cssCommentPathObject, sections) {
               sectionObject.markupContextPath = jsonFileName;
             }
           } catch (exception) {
-            console.warn("cannot parse json file (" + path + ")");
+            console.warn(`cannot parse json file (${markdownPath})`);
           }
         }
       }
     }
 
     if (commentContainsAlternativeMarkup && alternativeMarkup !== undefined) {
-      alternativeMarkup = alternativeMarkup.replace(/^\s*alternative-Markup:\s*/i, "");
+      alternativeMarkup = alternativeMarkup.replace(/^\s*alternative-Markup:\s*/i, '');
       sectionObject.alternativeMarkup = alternativeMarkup.trim();
 
       // if markup from hbs file add data context if available
@@ -503,9 +508,9 @@ export function getSectionObjectOfComment (cssCommentPathObject, sections) {
 
         // use json file specified by json-file
         if (alternativeJsonFileName) {
-          alternativePath = _getJSOJNPath(alternativeJsonFileName, srcPath);
+          alternativePath = _getJSONPath(alternativeJsonFileName, srcPath);
         } else {
-          alternativePath = _getJSOJNPath(alternativeMarkup, srcPath);
+          alternativePath = _getJSONPath(alternativeMarkup, srcPath);
         }
         if (fs.existsSync(alternativePath)) {
           try {
@@ -517,7 +522,7 @@ export function getSectionObjectOfComment (cssCommentPathObject, sections) {
               sectionObject.alternativeMarkupContextPath = alternativeJsonFileName;
             }
           } catch (exception) {
-            console.warn("cannot parse json file (" + alternativePath + ")");
+            console.warn(`cannot parse json file (${alternativePath})`);
           }
 
         }
@@ -525,7 +530,7 @@ export function getSectionObjectOfComment (cssCommentPathObject, sections) {
     }
 
     if (commentContainsAlternative2Markup && alternative2Markup !== undefined) {
-      alternative2Markup = alternative2Markup.replace(/^\s*alternative2-Markup:\s*/i, "");
+      alternative2Markup = alternative2Markup.replace(/^\s*alternative2-Markup:\s*/i, '');
       sectionObject.alternative2Markup = alternative2Markup.trim();
 
       // if markup from hbs file add data context if available
@@ -533,9 +538,9 @@ export function getSectionObjectOfComment (cssCommentPathObject, sections) {
 
         // use json file specified by json-file
         if (alternative2JsonFileName) {
-          alternative2Path = _getJSOJNPath(alternative2JsonFileName, srcPath);
+          alternative2Path = _getJSONPath(alternative2JsonFileName, srcPath);
         } else {
-          alternative2Path = _getJSOJNPath(alternative2Markup, srcPath);
+          alternative2Path = _getJSONPath(alternative2Markup, srcPath);
         }
         if (fs.existsSync(alternative2Path)) {
           try {
@@ -546,9 +551,8 @@ export function getSectionObjectOfComment (cssCommentPathObject, sections) {
               sectionObject.alternative2MarkupContext = alternative2Data;
               sectionObject.alternativ2eMarkupContextPath = alternative2JsonFileName;
             }
-          }
-          catch (exception) {
-            console.warn("cannot parse json file (" + alternative2Path + ")");
+          } catch (exception) {
+            console.warn(`cannot parse json file (${alternative2Path})`);
           }
 
         }
@@ -560,12 +564,12 @@ export function getSectionObjectOfComment (cssCommentPathObject, sections) {
   return -1;
 }
 
-export function convertKccCommentsToSectionObjects (inputComments) {
+export function convertKccCommentsToSectionObjects(inputComments) {
   const sections = {
     level: 0
   };
 
-  inputComments.forEach(function (comment) {
+  inputComments.forEach((comment) => {
     getSectionObjectOfComment(comment, sections);
   });
   return sections;

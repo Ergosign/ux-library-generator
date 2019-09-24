@@ -1,11 +1,10 @@
 #!/usr/bin/env node
 
-
 import * as fsExtra from 'fs-extra';
 import * as path from 'path';
 
-//process.env.PWD is node_modules/ux-library-generator
-//process.env.PROJECT_DIR is not always available
+// process.env.PWD is node_modules/ux-library-generator
+// process.env.PROJECT_DIR is not always available
 
 let projectDir;
 if (process.env.INIT_CWD) {
@@ -16,11 +15,11 @@ if (process.env.INIT_CWD) {
     projectDir = process.env.PWD;
 }
 
-var packageJson = fsExtra.readJSONSync(path.join(projectDir, 'package.json'));
+const packageJson = fsExtra.readJSONSync(path.join(projectDir, 'package.json'));
 if (!packageJson.hasOwnProperty('scripts')) {
     packageJson.scripts = {};
 }
-var changed = false;
+let changed = false;
 if (!packageJson.scripts.hasOwnProperty('generate-ux-library')) {
     packageJson.scripts['generate-ux-library'] = 'ux-library-generator-copy-files && ux-library-generator-generate';
     changed = true;
@@ -48,4 +47,3 @@ if (!fsExtra.existsSync(path.join(projectDir, 'ux-library-config/data/site.json'
         fsExtra.copySync(styleguideData, path.join(projectDir, 'ux-library-config/data/site.json'));
     }
 }
-

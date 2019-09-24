@@ -7,20 +7,20 @@ export function registerHandlebarsHelpers(handlebarsEngine) {
    */
   handlebarsEngine.registerHelper(
     'convertAngularMarkup',
-    function (inputMarkup: string) {
-      // makes single-quotes in arrays in angularised properties work
+    (inputMarkup: string) => {
+      // makes single-quotes in arrays in Angular properties work
       inputMarkup = inputMarkup.replace(/\]="\[(.|\s)*?\]"/gm, (m) => {
         return m.replace(/'/g, '\\\'');
       });
-      // makes single-quotes in objects in angularised properties work
+      // makes single-quotes in objects in Angular properties work
       inputMarkup = inputMarkup.replace(/\]="\{(.|\s)*?\}"/g, (m) => {
         return m.replace(/'/g, '\\\'');
       });
-      // concatenate strings and re-do in angularised properties
+      // concatenate strings and re-do in Angular properties
       inputMarkup = inputMarkup.replace(/\]="\'(.|\s)*?\'"/gm, (m) => {
         return m.replace(/[\n]/gm, ' ');
       });
-      // concatenate strings and re-do in angularised properties
+      // concatenate strings and re-do in Angular properties
       inputMarkup = inputMarkup.replace(/="(.|\s)*?"/gm, (m) => {
         return m.replace(/[\n]/gm, ' ');
       });
@@ -31,20 +31,20 @@ export function registerHandlebarsHelpers(handlebarsEngine) {
 
   handlebarsEngine.registerHelper(
     'unescapeStates',
-    function (inputMarkup: string) {
+    (inputMarkup: string) => {
       return inputMarkup.replace(/"/g, '\'');
     }
   );
 
   handlebarsEngine.registerHelper(
     'addValues',
-    function (firstParamter: number, secondParameter: number) {
+    (firstParamter: number, secondParameter: number) => {
       return firstParamter + secondParameter;
     }
   );
 
   handlebarsEngine.registerHelper('addPseudoClassesAndModifiers',
-    function (inputMarkup: string, pseudoSelector: string, modifier: string, disabledProperty: boolean, disabledPropertyName: string) {
+    (inputMarkup: string, pseudoSelector: string, modifier: string, disabledProperty: boolean, disabledPropertyName: string) => {
       let outputMarkup = inputMarkup;
       if (pseudoSelector && pseudoSelector.length > 1) {
         let markupArray = outputMarkup.split(' ');
@@ -62,7 +62,7 @@ export function registerHandlebarsHelpers(handlebarsEngine) {
         // outputMarkup = outputMarkup.replace(/><\//gm, ' [es-pseudoclass]="\'pseudoclass--\' + state" [pseudoclassSelector]="\'' + pseudoSelector + '\'"></');
       }
       if (modifier && modifier.length > 1) {
-        let markupArray = outputMarkup.split(' ');
+        const markupArray = outputMarkup.split(' ');
         let modifierIndex = -1;
         markupArray.forEach((value, index) => {
           if (value.match(/\[modifier]/)) {
@@ -71,7 +71,7 @@ export function registerHandlebarsHelpers(handlebarsEngine) {
         });
         let modifierText = '';
         if (modifierIndex > 0) {
-          let existingModifier = markupArray[modifierIndex];
+          const existingModifier = markupArray[modifierIndex];
           const modifierStartPosition = existingModifier.indexOf('="\'') + 3;
           const modifierEndPosition = existingModifier.indexOf('\'"', modifierStartPosition);
           let concatenatedModifiers = existingModifier.substring(modifierStartPosition, modifierEndPosition);
@@ -91,11 +91,11 @@ export function registerHandlebarsHelpers(handlebarsEngine) {
         }
       }
 
-      // concatenate strings and re-do in angularised properties
+      // concatenate strings and re-do in Angular properties
       outputMarkup = outputMarkup.replace(/\]="\'(.|\s)*?\'"/gm, (m) => {
         return m.replace(/[\n]/gm, ' ');
       });
-      // concatenate strings and re-do in angularised properties
+      // concatenate strings and re-do in Angular properties
       outputMarkup = outputMarkup.replace(/="(.|\s)*?"/gm, (m) => {
         return m.replace(/[\n]/gm, ' ');
       });
@@ -114,7 +114,7 @@ export function registerHandlebarsHelpers(handlebarsEngine) {
   );
 
   handlebarsEngine.registerHelper('addModifiers',
-    function (inputMarkup: string, modifier: string) {
+    (inputMarkup: string, modifier: string) => {
       let outputMarkup = inputMarkup;
       outputMarkup = outputMarkup.replace(/<\w(.|\s)*?>/gm, (match) => {
         if (match.indexOf(' ') === -1) {
@@ -123,7 +123,7 @@ export function registerHandlebarsHelpers(handlebarsEngine) {
         return match;
       });
       if (modifier && modifier.length > 1) {
-        let markupArray = outputMarkup.split(' ');
+        const markupArray = outputMarkup.split(' ');
         let modifierIndex = -1;
         markupArray.forEach((value, index) => {
           if (value.match(/\[modifier]/)) {
@@ -132,7 +132,7 @@ export function registerHandlebarsHelpers(handlebarsEngine) {
         });
         let modifierText = '';
         if (modifierIndex > 0) {
-          let existingModifier = markupArray[modifierIndex];
+          const existingModifier = markupArray[modifierIndex];
           const modifierStartPosition = existingModifier.indexOf('="\'') + 3;
           const modifierEndPosition = existingModifier.indexOf('\'"', modifierStartPosition);
           let concatenatedModifiers = existingModifier.substring(modifierStartPosition, modifierEndPosition);
@@ -155,8 +155,8 @@ export function registerHandlebarsHelpers(handlebarsEngine) {
     }
   );
 
-  handlebarsEngine.registerHelper('ifEquals', function (arg1, arg2, options) {
-    return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+  handlebarsEngine.registerHelper('ifEquals', function(arg1, arg2, options) {
+    return (arg1 === arg2) ? options.fn(this) : options.inverse(this);
   });
 
   /**
@@ -164,7 +164,7 @@ export function registerHandlebarsHelpers(handlebarsEngine) {
    */
   handlebarsEngine.registerHelper(
     'covertCodeboxNewlines',
-    function (inputMarkup: string) {
+    (inputMarkup: string) => {
       // concatenates newlines without leading +-character
       inputMarkup = inputMarkup.replace(/((?:[^\+])(\n))/gm, (m) => {
         return m.replace(/\n/, '\' +\n\'\\n');
@@ -178,7 +178,7 @@ export function registerHandlebarsHelpers(handlebarsEngine) {
    */
   handlebarsEngine.registerHelper(
     'dashedModuleNamePath',
-    function (sectionName: string) {
+    (sectionName: string) => {
       sectionName = sectionName.replace(/\s/g, '-').replace(/^[A-Z]/g, (m) => {
         return m.toLowerCase();
       }).replace(/[A-Z]/g, (m) => {
@@ -188,7 +188,7 @@ export function registerHandlebarsHelpers(handlebarsEngine) {
     }
   );
 
-  handlebarsEngine.registerHelper('json', function(context) {
+  handlebarsEngine.registerHelper('json', (context) => {
     return JSON.stringify(context);
   });
 }

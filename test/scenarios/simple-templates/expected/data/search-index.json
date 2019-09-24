@@ -5,7 +5,7 @@
         "description": "No overview Markdown file found",
         "srcPath": null,
         "level": 1,
-        "buildDate": "19.9.2019"
+        "buildDate": "24.9.2019"
     },
     "level": 0,
     "sectionabc-test": {
@@ -431,7 +431,7 @@
                     }
                 }
             },
-            "buildDate": "19.9.2019"
+            "buildDate": "24.9.2019"
         },
         "subSections": {
             "newjsonpath": {
@@ -807,7 +807,7 @@
                         }
                     }
                 },
-                "buildDate": "19.9.2019"
+                "buildDate": "24.9.2019"
             },
             "angularnewjson": {
                 "sectionName": "angularnewjson",
@@ -869,7 +869,7 @@
                         "simple-test-angular-newjson.json"
                     ]
                 },
-                "buildDate": "19.9.2019"
+                "buildDate": "24.9.2019"
             }
         },
         "angularnewjson": {
@@ -932,7 +932,7 @@
                     "simple-test-angular-newjson.json"
                 ]
             },
-            "buildDate": "19.9.2019"
+            "buildDate": "24.9.2019"
         }
     },
     "subSections": {
@@ -1359,7 +1359,7 @@
                         }
                     }
                 },
-                "buildDate": "19.9.2019"
+                "buildDate": "24.9.2019"
             },
             "subSections": {
                 "newjsonpath": {
@@ -1735,7 +1735,7 @@
                             }
                         }
                     },
-                    "buildDate": "19.9.2019"
+                    "buildDate": "24.9.2019"
                 },
                 "angularnewjson": {
                     "sectionName": "angularnewjson",
@@ -1797,7 +1797,7 @@
                             "simple-test-angular-newjson.json"
                         ]
                     },
-                    "buildDate": "19.9.2019"
+                    "buildDate": "24.9.2019"
                 }
             },
             "angularnewjson": {
@@ -1860,7 +1860,7 @@
                         "simple-test-angular-newjson.json"
                     ]
                 },
-                "buildDate": "19.9.2019"
+                "buildDate": "24.9.2019"
             }
         }
     }

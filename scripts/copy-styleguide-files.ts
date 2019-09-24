@@ -1,20 +1,20 @@
 #!/usr/bin/env node
 
 import * as fsExtra from 'fs-extra';
-import { parseSiteJson } from "./setup/setupContent";
+import { parseSiteJson } from './setup/setupContent';
 import { Bundler } from 'scss-bundle';
 
-import { SiteJson } from './typings'
+import { SiteJson } from './typings';
 
 let projectRootFolder = 'example';
-let configFilePath = "styleguide-data/data/site.json"
+let configFilePath = 'styleguide-data/data/site.json';
 const commandLineArguments = process.argv;
 
 commandLineArguments.forEach((argument, index) => {
 
   switch (argument) {
-    case "--config":
-      //load parameter
+    case '--config':
+      // load parameter
       if (commandLineArguments.length === index) {
         console.error(`--config parameter provided but no value given`);
         return;
@@ -22,8 +22,8 @@ commandLineArguments.forEach((argument, index) => {
       configFilePath = commandLineArguments[index + 1];
       console.info(`Using provided config file : ${configFilePath}`);
       break;
-    case "--rootFolder":
-      //load parameter
+    case '--rootFolder':
+      // load parameter
       if (commandLineArguments.length === index) {
         console.error(`--rootFolder parameter provided but no value given`);
         return;
@@ -45,20 +45,20 @@ if (fsExtra.pathExistsSync('ux-library-config/')) {
     fsExtra.copySync('ux-library-config/', '.tmp/styleguide-data');
 }
 
-const siteData: SiteJson = parseSiteJson(projectRootFolder,configFilePath);
+const siteData: SiteJson = parseSiteJson(projectRootFolder, configFilePath);
 
 if (siteData.assetPath) {
     fsExtra.copySync(siteData.assetPath, '.tmp/styleguide/src/assets');
 }
 if (siteData.scssPath) {
-    var files = fsExtra.readdirSync(siteData.scssPath);
-    var bundler = new Bundler();
+    const files = fsExtra.readdirSync(siteData.scssPath);
+    const bundler = new Bundler();
     fsExtra.ensureDirSync('.tmp/styleguide/src/assets/scss/');
-    files.forEach(value => {
+    files.forEach((value) => {
         bundler.bundle(siteData.scssPath + '/' + value, undefined, undefined, files)
-            .then(bundle => {
+            .then((bundle) => {
                 fsExtra.writeFileSync('.tmp/styleguide/src/assets/scss/' + value, bundle.bundledContent);
-            })
+            });
     });
 }
 

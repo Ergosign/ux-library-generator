@@ -18,8 +18,8 @@ const helpers = handlebarsHelpers();
 
 const app = assemble();
 
-export function startGeneration (projectRootFolder: string, configFilePath: string, done: () => void) {
-  //load the data
+export function startGeneration(projectRootFolder: string, configFilePath: string, done: () => void) {
+  // load the data
   const siteData = parseSiteJson(projectRootFolder, configFilePath);
 
   console.info(colors.green(`Loading partials and layouts...`));
@@ -27,14 +27,14 @@ export function startGeneration (projectRootFolder: string, configFilePath: stri
   const pathToPartials = siteData.componentPath ? siteData.componentPath + '/**/*.hbs' : null;
   console.info(`Path to partials: ${pathToPartials}`);
   // configure the partials and layouts
-  app.task('load', function (cb) {
+  app.task('load',  (cb) => {
     app.data([`${siteData.dataFilesPath}/*.json`, './src/html/pages/*.json']);
     app.partials([`${siteData.partialsPath}/*.hbs`, pathToPartials ? pathToPartials : '']);
     app.layouts([`${siteData.layoutsPath}/*.hbs`]);
     cb();
   });
   // Add some logging
-  app.on('preRender', function (view) {
+  app.on('preRender',  (view) => {
     console.info(colors.yellow('Generating ==>'), colors.green(view.relative));
   });
 
@@ -53,7 +53,7 @@ export function startGeneration (projectRootFolder: string, configFilePath: stri
   });
 
   // configure the build
-  app.task('default', ['load'], function () {
+  app.task('default', ['load'], () => {
     setupContent(app, siteData);
     const returnValue = app.toStream('uxLibraryElements')
       .pipe(app.renderFile())
@@ -64,7 +64,7 @@ export function startGeneration (projectRootFolder: string, configFilePath: stri
   /**
    * Task that renders example layout pages that specify their surrounding layout inside their hbs file and have their associated data inside a json file with the same file name inside the same folder.
    */
-  app.task('buildPages', function () {
+  app.task('buildPages', () => {
     // rename file extension (using gulpExtName) from .hbs to .html because assemble doesn't do it anymore: https://github.com/assemble/assemble/issues/633
     app.src((siteData.examplePagesSourcePath) + '/**/*.hbs')
       .pipe(gulpExtName())
@@ -72,13 +72,13 @@ export function startGeneration (projectRootFolder: string, configFilePath: stri
       .pipe(app.dest(siteData.examplePagesTargetPath));
   });
 
-  app.task('bundleScss', ['load'], function () {
+  app.task('bundleScss', ['load'], () => {
     if (siteData.scssPath) {
-      let files = fsExtra.readdirSync(siteData.scssPath);
-      let bundler = new Bundler();
-      files.forEach(value => {
+      const files = fsExtra.readdirSync(siteData.scssPath);
+      const bundler = new Bundler();
+      files.forEach((value) => {
         bundler.bundle(siteData.scssPath + '/' + value, undefined, undefined, files)
-          .then(bundle => {
+          .then((bundle) => {
             fsExtra.writeFileSync(`${projectRootFolder}/.tmp/styleguide/src/assets/scss/${value}`, bundle.bundledContent);
           });
       });
@@ -86,7 +86,7 @@ export function startGeneration (projectRootFolder: string, configFilePath: stri
   });
 
   // start the assembly
-  app.build(['default'], function (err) {
+  app.build(['default'], (err) => {
     if (err) {
       console.error('ERROR:', err);
     }
@@ -94,4 +94,3 @@ export function startGeneration (projectRootFolder: string, configFilePath: stri
   });
 
 }
-
