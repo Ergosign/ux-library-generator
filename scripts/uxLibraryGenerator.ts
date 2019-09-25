@@ -5,6 +5,7 @@ import * as colors from 'colors/safe';
 import { registerHandlebarsHelpers } from './handlebarsHelpers/handlebarsHelpers';
 import { registerHandlebarsHelpersMarkup } from './handlebarsHelpers/markupHelpers';
 import { registerHandlebarsHelpersStyleguide } from './handlebarsHelpers/styleguideHelpers';
+import { registerExtraHandlebarsHelpers } from './handlebarsHelpers/registerExtraHandlebarsHelpers';
 import { setupContent, parseSiteJson } from './setup/setupContent';
 import { Bundler } from 'scss-bundle';
 
@@ -18,23 +19,23 @@ const helpers = handlebarsHelpers();
 
 const app = assemble();
 
-export function startGeneration(projectRootFolder: string, configFilePath: string, done: () => void) {
+export async function startGeneration(projectRootFolder: string, configFilePath: string, done: () => void) {
   // load the data
-  const siteData = parseSiteJson(projectRootFolder, configFilePath);
+  const uxLibraryConfig = parseSiteJson(projectRootFolder, configFilePath);
 
   console.info(colors.green(`Loading partials and layouts...`));
 
-  const pathToPartials = siteData.componentPath ? siteData.componentPath + '/**/*.hbs' : null;
+  const pathToPartials = uxLibraryConfig.componentPath ? uxLibraryConfig.componentPath + '/**/*.hbs' : null;
   console.info(`Path to partials: ${pathToPartials}`);
   // configure the partials and layouts
-  app.task('load',  (cb) => {
-    app.data([`${siteData.dataFilesPath}/*.json`, './src/html/pages/*.json']);
-    app.partials([`${siteData.partialsPath}/*.hbs`, pathToPartials ? pathToPartials : '']);
-    app.layouts([`${siteData.layoutsPath}/*.hbs`]);
+  app.task('load', (cb) => {
+    app.data([`${uxLibraryConfig.dataFilesPath}/*.json`, './src/html/pages/*.json']);
+    app.partials([`${uxLibraryConfig.partialsPath}/*.hbs`, pathToPartials ? pathToPartials : '']);
+    app.layouts([`${uxLibraryConfig.layoutsPath}/*.hbs`]);
     cb();
   });
   // Add some logging
-  app.on('preRender',  (view) => {
+  app.on('preRender', (view) => {
     console.info(colors.yellow('Generating ==>'), colors.green(view.relative));
   });
 
@@ -54,7 +55,7 @@ export function startGeneration(projectRootFolder: string, configFilePath: strin
 
   // configure the build
   app.task('default', ['load'], () => {
-    setupContent(app, siteData);
+    setupContent(app, uxLibraryConfig);
     const returnValue = app.toStream('uxLibraryElements')
       .pipe(app.renderFile())
       .pipe(app.dest('./'));
@@ -66,24 +67,27 @@ export function startGeneration(projectRootFolder: string, configFilePath: strin
    */
   app.task('buildPages', () => {
     // rename file extension (using gulpExtName) from .hbs to .html because assemble doesn't do it anymore: https://github.com/assemble/assemble/issues/633
-    app.src((siteData.examplePagesSourcePath) + '/**/*.hbs')
+    app.src((uxLibraryConfig.examplePagesSourcePath) + '/**/*.hbs')
       .pipe(gulpExtName())
       .pipe(app.renderFile())
-      .pipe(app.dest(siteData.examplePagesTargetPath));
+      .pipe(app.dest(uxLibraryConfig.examplePagesTargetPath));
   });
 
   app.task('bundleScss', ['load'], () => {
-    if (siteData.scssPath) {
-      const files = fsExtra.readdirSync(siteData.scssPath);
+    if (uxLibraryConfig.scssPath) {
+      const files = fsExtra.readdirSync(uxLibraryConfig.scssPath);
       const bundler = new Bundler();
       files.forEach((value) => {
-        bundler.bundle(siteData.scssPath + '/' + value, undefined, undefined, files)
+        bundler.bundle(uxLibraryConfig.scssPath + '/' + value, undefined, undefined, files)
           .then((bundle) => {
             fsExtra.writeFileSync(`${projectRootFolder}/.tmp/styleguide/src/assets/scss/${value}`, bundle.bundledContent);
           });
       });
     }
   });
+
+  // register project specific handlebars helpers
+  await registerExtraHandlebarsHelpers(handlebarsEngine, uxLibraryConfig);
 
   // start the assembly
   app.build(['default'], (err) => {

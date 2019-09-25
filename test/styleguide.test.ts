@@ -1,9 +1,9 @@
 import * as Handlebars from 'handlebars';
 
 // Local helpers
-import { registerHandlebarsHelpersMarkup } from '../../scripts/handlebarsHelpers/markupHelpers';
+import { registerHandlebarsHelpersMarkup } from '../scripts/handlebarsHelpers/markupHelpers';
 registerHandlebarsHelpersMarkup(Handlebars, {});
-import { registerHandlebarsHelpersStyleguide } from '../../scripts/handlebarsHelpers/styleguideHelpers';
+import { registerHandlebarsHelpersStyleguide } from '../scripts/handlebarsHelpers/styleguideHelpers';
 registerHandlebarsHelpersStyleguide(Handlebars);
 
 

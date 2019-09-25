@@ -8,7 +8,7 @@ export interface Section {
   level: number
 }
 
-export interface SiteJson {
+export interface UxLibraryConfig {
   title: string;
   version: string;
   targetPath: string;
@@ -16,6 +16,7 @@ export interface SiteJson {
   dataFilesPath: string;
   partialsPath: string;
   layoutsPath: string;
+  additionalHandlebarsHelpersPath: string;
   examplePagesTargetPath: string;
   examplePagesSourcePath: string;
   overviewMarkdownFile: string;

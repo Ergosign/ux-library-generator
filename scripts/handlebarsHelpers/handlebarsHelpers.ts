@@ -1,4 +1,3 @@
-import * as handlebars from 'handlebars';
 
 export function registerHandlebarsHelpers(handlebarsEngine) {
 

@@ -2,7 +2,7 @@ import Assemble from 'assemble';
 
 import * as colors from 'colors/safe';
 
-import { SiteJson, Section } from '../typings';
+import { UxLibraryConfig, Section } from '../typings';
 
 import { merge , extend } from 'lodash';
 import * as fs from 'fs';
@@ -11,96 +11,103 @@ import * as fsExtra from 'fs-extra';
 import { findCommentsInDirectory } from '../finderParser/commentsFinder';
 import { convertKccCommentsToSectionObjects } from '../finderParser/commentsParser';
 
-export function parseSiteJson(projectRootFolder: string, configFilePath: string): SiteJson {
+export function parseSiteJson(projectRootFolder: string, configFilePath: string): UxLibraryConfig {
   const siteJsonFilePath = `${projectRootFolder}/${configFilePath}`;
   console.info(`Loading configuration from: ${colors.blue(siteJsonFilePath)}`);
   console.info(colors.grey(`To load from alternate locations use the '--config' and '--rootFolder' parameters`));
   const siteJsonContent = fs.readFileSync(siteJsonFilePath);
-  const siteJson: SiteJson = JSON.parse(siteJsonContent.toString());
+  const uxLibraryConfig: UxLibraryConfig = JSON.parse(siteJsonContent.toString());
   console.info(`Loaded Config:`);
-  console.dir(siteJson);
+  console.dir(uxLibraryConfig);
   console.info(``);
 
   // set default values
-  if (siteJson.title === undefined) {
-    siteJson.title = 'UX Library';
+  if (uxLibraryConfig.title === undefined) {
+    uxLibraryConfig.title = 'UX Library';
   }
-  if (siteJson.version === undefined) {
-    siteJson.version = '1.0';
+  if (uxLibraryConfig.version === undefined) {
+    uxLibraryConfig.version = '1.0';
   }
-  if (siteJson.scssPath === undefined) {
-    siteJson.scssPath = `${projectRootFolder}/src/scss`;
+  if (uxLibraryConfig.scssPath === undefined) {
+    uxLibraryConfig.scssPath = `${projectRootFolder}/src/scss`;
   } else {
-    siteJson.scssPath = projectRootFolder + '/' + siteJson.scssPath;
+    uxLibraryConfig.scssPath = projectRootFolder + '/' + uxLibraryConfig.scssPath;
   }
-  if (siteJson.overviewMarkdownFile === undefined) {
-    siteJson.overviewMarkdownFile = siteJson.scssPath + '/documentation/styleguide.md';
+  if (uxLibraryConfig.overviewMarkdownFile === undefined) {
+    uxLibraryConfig.overviewMarkdownFile = uxLibraryConfig.scssPath + '/documentation/styleguide.md';
   }
-  if (siteJson.targetPath === undefined) {
-    siteJson.targetPath = `${projectRootFolder}/www/styleguide`;
+  if (uxLibraryConfig.targetPath === undefined) {
+    uxLibraryConfig.targetPath = `${projectRootFolder}/www/styleguide`;
   } else {
-    siteJson.targetPath = projectRootFolder + '/' + siteJson.targetPath;
+    uxLibraryConfig.targetPath = projectRootFolder + '/' + uxLibraryConfig.targetPath;
   }
-  if (siteJson.examplePagesSourcePath === undefined) {
-    siteJson.examplePagesSourcePath = `${projectRootFolder}/src/html/pages`;
+  if (uxLibraryConfig.examplePagesSourcePath === undefined) {
+    uxLibraryConfig.examplePagesSourcePath = `${projectRootFolder}/src/html/pages`;
   } else {
-    siteJson.examplePagesSourcePath = projectRootFolder + '/' + siteJson.examplePagesSourcePath;
+    uxLibraryConfig.examplePagesSourcePath = projectRootFolder + '/' + uxLibraryConfig.examplePagesSourcePath;
   }
-  if (siteJson.dataFilesPath === undefined) {
-    siteJson.dataFilesPath = `${projectRootFolder}/src/ux-library/data`;
+  if (uxLibraryConfig.dataFilesPath === undefined) {
+    uxLibraryConfig.dataFilesPath = `${projectRootFolder}/src/ux-library/data`;
   } else {
-    siteJson.dataFilesPath = projectRootFolder + '/' + siteJson.dataFilesPath;
+    uxLibraryConfig.dataFilesPath = projectRootFolder + '/' + uxLibraryConfig.dataFilesPath;
   }
-  if (siteJson.partialsPath === undefined) {
-    siteJson.partialsPath = `${projectRootFolder}/src/ux-library/partials`;
+  if (uxLibraryConfig.partialsPath === undefined) {
+    uxLibraryConfig.partialsPath = `${projectRootFolder}/src/ux-library/partials`;
   } else {
-    siteJson.partialsPath = projectRootFolder + '/' + siteJson.partialsPath;
+    uxLibraryConfig.partialsPath = projectRootFolder + '/' + uxLibraryConfig.partialsPath;
   }
-  if (siteJson.layoutsPath === undefined) {
-    siteJson.layoutsPath = `${projectRootFolder}/src/ux-library/layouts`;
+  if (uxLibraryConfig.layoutsPath === undefined) {
+    uxLibraryConfig.layoutsPath = `${projectRootFolder}/src/ux-library/layouts`;
   } else {
-    siteJson.layoutsPath = projectRootFolder + '/' + siteJson.layoutsPath;
+    uxLibraryConfig.layoutsPath = projectRootFolder + '/' + uxLibraryConfig.layoutsPath;
   }
-  if (siteJson.examplePagesTargetPath === undefined) {
-    siteJson.examplePagesTargetPath = `${projectRootFolder}/www/examples`;
+  if (uxLibraryConfig.examplePagesTargetPath === undefined) {
+    uxLibraryConfig.examplePagesTargetPath = `${projectRootFolder}/www/examples`;
   } else {
-    siteJson.examplePagesTargetPath = projectRootFolder + '/' + siteJson.examplePagesTargetPath;
+    uxLibraryConfig.examplePagesTargetPath = projectRootFolder + '/' + uxLibraryConfig.examplePagesTargetPath;
   }
-  if (siteJson.assetPath === undefined) {
-    siteJson.assetPath = `${projectRootFolder}/src/assets`;
+  if (uxLibraryConfig.assetPath === undefined) {
+    uxLibraryConfig.assetPath = `${projectRootFolder}/src/assets`;
   } else {
-    siteJson.assetPath = projectRootFolder + '/' + siteJson.assetPath;
+    uxLibraryConfig.assetPath = projectRootFolder + '/' + uxLibraryConfig.assetPath;
   }
-  if (siteJson.imagePath === undefined) {
-    siteJson.imagePath = `${projectRootFolder}/src/img`;
+  if (uxLibraryConfig.imagePath === undefined) {
+    uxLibraryConfig.imagePath = `${projectRootFolder}/src/img`;
   } else {
-    siteJson.imagePath = projectRootFolder + '/' + siteJson.imagePath;
+    uxLibraryConfig.imagePath = projectRootFolder + '/' + uxLibraryConfig.imagePath;
   }
 
-  if (siteJson.componentPath === undefined) {
-    siteJson.componentPath = `${projectRootFolder}/src/scss`;
+  if (uxLibraryConfig.componentPath === undefined) {
+    uxLibraryConfig.componentPath = `${projectRootFolder}/src/scss`;
   } else {
-    siteJson.componentPath = projectRootFolder + '/' + siteJson.componentPath;
-  }
-  if (siteJson.templateName === undefined) {
-    siteJson.templateName = 'style-guide-layout.hbs';
-  }
-  if (siteJson.gitlabStemUrl === undefined) {
-    siteJson.gitlabStemUrl = 'Please set gitlabStemUrl in site.json';
+    uxLibraryConfig.componentPath = projectRootFolder + '/' + uxLibraryConfig.componentPath;
   }
 
-  return siteJson;
+  // Handlebars helpers - used to load additional handlebars helpers
+  if (uxLibraryConfig.additionalHandlebarsHelpersPath === undefined) {
+    uxLibraryConfig.additionalHandlebarsHelpersPath = `${projectRootFolder}/src/ux-library/handlebars-helpers`;
+  } else {
+    uxLibraryConfig.additionalHandlebarsHelpersPath = projectRootFolder + '/' + uxLibraryConfig.additionalHandlebarsHelpersPath;
+  }
+  if (uxLibraryConfig.templateName === undefined) {
+    uxLibraryConfig.templateName = 'style-guide-layout.hbs';
+  }
+  if (uxLibraryConfig.gitlabStemUrl === undefined) {
+    uxLibraryConfig.gitlabStemUrl = 'Please set gitlabStemUrl in ux-library-config.json';
+  }
+
+  return uxLibraryConfig;
 }
 
-export function setupContent(app: Assemble, siteData: SiteJson) {
+export function setupContent(app: Assemble, uxLibraryConfig: UxLibraryConfig) {
 
-  const componentPath = siteData.componentPath;
+  const componentPath = uxLibraryConfig.componentPath;
 
   // setup the uxLibrary pages
   const foundComments = findCommentsInDirectory(componentPath, '*.scss', '');
   const uxSections = convertKccCommentsToSectionObjects(foundComments);
 
-  const overviewMarkdownFile = siteData.overviewMarkdownFile;
+  const overviewMarkdownFile = uxLibraryConfig.overviewMarkdownFile;
   const sections: Map<string, Section> = new Map();
 
   // in addition to the pages generated from the KSS comments create an index / overview page
@@ -134,7 +141,7 @@ export function setupContent(app: Assemble, siteData: SiteJson) {
       if (sectionKey === 'index') {
 
         // create html file for the index page
-        createHtmlFileForSection(section, sectionKey, navBarItems, sectionKey, siteData, app);
+        createHtmlFileForSection(section, sectionKey, navBarItems, sectionKey, uxLibraryConfig, app);
       } else if (typeof (section) === 'object' && section.sectionName !== undefined) {
         // now only create pages for each second level page (e.g. not for first level like Building Blocks
         // but for second level like Entry Field (each control on a separate page)
@@ -142,7 +149,7 @@ export function setupContent(app: Assemble, siteData: SiteJson) {
           if (section.hasOwnProperty(subSectionKey)) {
             const subSection = section[subSectionKey];
             if (typeof (subSection) === 'object' && subSection.sectionName !== undefined) {
-              createHtmlFileForSection(subSection, subSectionKey, navBarItems, sectionKey, siteData, app);
+              createHtmlFileForSection(subSection, subSectionKey, navBarItems, sectionKey, uxLibraryConfig, app);
             }
           }
         }
@@ -151,13 +158,13 @@ export function setupContent(app: Assemble, siteData: SiteJson) {
   }
 
   // write a file containing all sections and their data. This file is used by the search.
-  if (siteData.targetPath !== undefined) {
-    fsExtra.outputFileSync(siteData.targetPath + '/data/search-index.json', JSON.stringify(sections, null, 4));
+  if (uxLibraryConfig.targetPath !== undefined) {
+    fsExtra.outputFileSync(uxLibraryConfig.targetPath + '/data/search-index.json', JSON.stringify(sections, null, 4));
   } else {
     console.error('Please specify the targetPath in your site.json.');
   }
 
-  return siteData;
+  return uxLibraryConfig;
 }
 
 export function getListOfNavBarItems(sections) {
@@ -229,10 +236,10 @@ export function sortAlphabetically(dict) {
  * the navigation bar.
  * @param parentSectionName The name of the parent section. Necessary to detect which navigation item must be active when this page
  * is displayed.
- * @param siteData Contents of the site.json file.
+ * @param uxLibraryConfig Contents of the site.json file.
  * @param app The assemble app
  */
-export function createHtmlFileForSection(sectionData, sectionName, navBarItems, parentSectionName, siteData, app) {
+export function createHtmlFileForSection(sectionData, sectionName, navBarItems, parentSectionName, uxLibraryConfig: UxLibraryConfig, app) {
   'use strict';
   let filePath;
 
@@ -244,7 +251,7 @@ export function createHtmlFileForSection(sectionData, sectionName, navBarItems, 
 
   const buildDate = formattedDateAsString(new Date());
 
-  const indexPageTemplateName = siteData.templateName;
+  const indexPageTemplateName = uxLibraryConfig.templateName;
   const currentPage = {
     data: {
       layout: indexPageTemplateName,
@@ -253,7 +260,7 @@ export function createHtmlFileForSection(sectionData, sectionName, navBarItems, 
       parentSectionName: null,
       srcPath: null
     },
-    dest: siteData.targetPath + filePath
+    dest: uxLibraryConfig.targetPath + filePath
   };
 
   // add build date to data so that it
@@ -271,7 +278,7 @@ export function createHtmlFileForSection(sectionData, sectionName, navBarItems, 
   if (fs.existsSync(currentPage.dest) && currentPage.data.srcPath && fs.existsSync(currentPage.data.srcPath)) {
     const sourceStats = fs.statSync(currentPage.data.srcPath);
     const destStats = fs.statSync(currentPage.dest);
-    if (siteData.enableDeltaUpdates && sourceStats.mtime <= destStats.mtime) {
+    if (uxLibraryConfig.enableDeltaUpdates && sourceStats.mtime <= destStats.mtime) {
       generate = false;
     }
   }
@@ -284,9 +291,9 @@ export function createHtmlFileForSection(sectionData, sectionName, navBarItems, 
     }
     );
 
-    if (siteData.templateNameIframe !== undefined) {
+    if (uxLibraryConfig.templateNameIframe !== undefined) {
       // only generate html files for iFrames if iframe layout specified
-      createHtmlIframeFilesForSection(sectionName, sectionData, siteData, app);
+      createHtmlIframeFilesForSection(sectionName, sectionData, uxLibraryConfig, app);
     }
   }
 }
@@ -298,10 +305,10 @@ export function createHtmlFileForSection(sectionData, sectionName, navBarItems, 
  * all subsections (and nested subsections) for the given section.
  * @param sectionKey The key of the section that should be written to an html file (as well as its subsections)
  * @param section The section that should be written to an html file (as well as its subsections)
- * @param siteData The site.json file contents.
+ * @param uxLibraryConfig The site.json file contents.
  * @param app The assemble app object.
  */
-export function createHtmlIframeFilesForSection(sectionKey, section, siteData, app) {
+export function createHtmlIframeFilesForSection(sectionKey, section, uxLibraryConfig: UxLibraryConfig, app) {
   'use strict';
 
   // index page does not need to
@@ -311,26 +318,26 @@ export function createHtmlIframeFilesForSection(sectionKey, section, siteData, a
     // create html file for the given section
     const firstPage = {
       data: {
-        layout: siteData.templateNameIframe,
+        layout: uxLibraryConfig.templateNameIframe,
         navBarItems: null,
         subSections: null,
         parentSectionName: null,
         srcPath: null
       },
-      dest: siteData.targetPath + section.htmlFile
+      dest: uxLibraryConfig.targetPath + section.htmlFile
     };
 
     let alternativePage;
     if (section.alternativeMarkup) {
       alternativePage = {
         data: {
-          layout: siteData.alternativeTemplateNameIframe,
+          layout: uxLibraryConfig.alternativeTemplateNameIframe,
           navBarItems: null,
           subSections: null,
           parentSectionName: null,
           srcPath: null
         },
-        dest: siteData.targetPath + section.alternativeHtmlFile
+        dest: uxLibraryConfig.targetPath + section.alternativeHtmlFile
       };
       alternativePage.data = merge(alternativePage.data, section);
     }
@@ -339,13 +346,13 @@ export function createHtmlIframeFilesForSection(sectionKey, section, siteData, a
     if (section.alternative2Markup) {
       alternative2Page = {
         data: {
-          layout: siteData.alternative2TemplateNameIframe,
+          layout: uxLibraryConfig.alternative2TemplateNameIframe,
           navBarItems: null,
           subSections: null,
           parentSectionName: null,
           srcPath: null
         },
-        dest: siteData.targetPath + section.alternative2HtmlFile
+        dest: uxLibraryConfig.targetPath + section.alternative2HtmlFile
       };
       alternative2Page.data = merge(alternative2Page.data, section);
     }
@@ -376,17 +383,17 @@ export function createHtmlIframeFilesForSection(sectionKey, section, siteData, a
     }
 
     // recursively create html files for all subsections
-    createHtmlIframeFilesForSubsections(section, siteData, app);
+    createHtmlIframeFilesForSubsections(section, uxLibraryConfig, app);
   }
 }
 
 /**
  * Recursive function that creates html files for each of the given sections subsections.
  * @param section The section that should be written to an html file (as well as its subsections)
- * @param siteData The site.json file contents.
+ * @param uxLibraryConfig The site.json file contents.
  * @param app The assemble app object.
  */
-export function createHtmlIframeFilesForSubsections(section, siteData, app) {
+export function createHtmlIframeFilesForSubsections(section, uxLibraryConfig: UxLibraryConfig, app) {
   'use strict';
 
   for (const subSectionKey in section) {
@@ -401,18 +408,18 @@ export function createHtmlIframeFilesForSubsections(section, siteData, app) {
         // generate an html page for the current subsection
         const subSectionPage = {
           data: {
-            layout: siteData.templateNameIframe
+            layout: uxLibraryConfig.templateNameIframe
           },
-          dest: siteData.targetPath + subSection.htmlFile
+          dest: uxLibraryConfig.targetPath + subSection.htmlFile
         };
 
         let alternativeSubSectionPage;
         if (subSection.alternativeMarkup) {
           alternativeSubSectionPage = {
             data: {
-              layout: siteData.alternativeTemplateNameIframe
+              layout: uxLibraryConfig.alternativeTemplateNameIframe
             },
-            dest: siteData.targetPath + subSection.alternativeHtmlFile
+            dest: uxLibraryConfig.targetPath + subSection.alternativeHtmlFile
           };
           alternativeSubSectionPage.data = merge(alternativeSubSectionPage.data, subSection);
         }
@@ -421,9 +428,9 @@ export function createHtmlIframeFilesForSubsections(section, siteData, app) {
         if (subSection.alternative2Markup) {
           alternative2SubSectionPage = {
             data: {
-              layout: siteData.alternative2TemplateNameIframe
+              layout: uxLibraryConfig.alternative2TemplateNameIframe
             },
-            dest: siteData.targetPath + subSection.alternative2HtmlFile
+            dest: uxLibraryConfig.targetPath + subSection.alternative2HtmlFile
           };
           alternative2SubSectionPage.data = merge(alternative2SubSectionPage.data, subSection);
         }
@@ -454,7 +461,7 @@ export function createHtmlIframeFilesForSubsections(section, siteData, app) {
         }
 
         // recursively create html files for all subsections
-        createHtmlIframeFilesForSubsections(subSection, siteData, app);
+        createHtmlIframeFilesForSubsections(subSection, uxLibraryConfig, app);
       }
     }
   }

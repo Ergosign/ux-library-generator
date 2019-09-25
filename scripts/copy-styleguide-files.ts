@@ -4,7 +4,7 @@ import * as fsExtra from 'fs-extra';
 import { parseSiteJson } from './setup/setupContent';
 import { Bundler } from 'scss-bundle';
 
-import { SiteJson } from './typings';
+import { UxLibraryConfig } from './typings';
 
 let projectRootFolder = 'example';
 let configFilePath = 'styleguide-data/data/site.json';
@@ -45,17 +45,17 @@ if (fsExtra.pathExistsSync('ux-library-config/')) {
     fsExtra.copySync('ux-library-config/', '.tmp/styleguide-data');
 }
 
-const siteData: SiteJson = parseSiteJson(projectRootFolder, configFilePath);
+const uxLibraryConfig: UxLibraryConfig = parseSiteJson(projectRootFolder, configFilePath);
 
-if (siteData.assetPath) {
-    fsExtra.copySync(siteData.assetPath, '.tmp/styleguide/src/assets');
+if (uxLibraryConfig.assetPath) {
+    fsExtra.copySync(uxLibraryConfig.assetPath, '.tmp/styleguide/src/assets');
 }
-if (siteData.scssPath) {
-    const files = fsExtra.readdirSync(siteData.scssPath);
+if (uxLibraryConfig.scssPath) {
+    const files = fsExtra.readdirSync(uxLibraryConfig.scssPath);
     const bundler = new Bundler();
     fsExtra.ensureDirSync('.tmp/styleguide/src/assets/scss/');
     files.forEach((value) => {
-        bundler.bundle(siteData.scssPath + '/' + value, undefined, undefined, files)
+        bundler.bundle(uxLibraryConfig.scssPath + '/' + value, undefined, undefined, files)
             .then((bundle) => {
                 fsExtra.writeFileSync('.tmp/styleguide/src/assets/scss/' + value, bundle.bundledContent);
             });

@@ -1,0 +1,85 @@
+{
+    "index": {
+        "sectionName": "index",
+        "sectionTitle": "Overview",
+        "description": "No overview Markdown file found",
+        "srcPath": null,
+        "level": 1,
+        "buildDate": "25.9.2019"
+    },
+    "level": 0,
+    "sectionabc-test": {
+        "sectionName": "sectionabc-test",
+        "level": 1,
+        "sectionLocation": [],
+        "sectionRef": "sectionRef-sectionabc-test",
+        "additional": {
+            "sectionName": "additional",
+            "level": 2,
+            "htmlFile": "additional_additional.html",
+            "alternativeHtmlFile": "alternative-additional_additional.html",
+            "alternative2HtmlFile": "alternative2-additional_additional.html",
+            "sectionLocation": [],
+            "sectionRef": "sectionRef-additional",
+            "destPath": "./overview-additional.html",
+            "srcPath": "test/scenarios/additional-handlebars-helpers/fixture/src/scss/_test-section.scss",
+            "sectionTitle": "Test Section",
+            "markup": "<div>{{additionalHelper 'Test Passed'}}</div>",
+            "buildDate": "25.9.2019"
+        },
+        "subSections": {
+            "additional": {
+                "sectionName": "additional",
+                "level": 2,
+                "htmlFile": "additional_additional.html",
+                "alternativeHtmlFile": "alternative-additional_additional.html",
+                "alternative2HtmlFile": "alternative2-additional_additional.html",
+                "sectionLocation": [],
+                "sectionRef": "sectionRef-additional",
+                "destPath": "./overview-additional.html",
+                "srcPath": "test/scenarios/additional-handlebars-helpers/fixture/src/scss/_test-section.scss",
+                "sectionTitle": "Test Section",
+                "markup": "<div>{{additionalHelper 'Test Passed'}}</div>",
+                "buildDate": "25.9.2019"
+            }
+        }
+    },
+    "subSections": {
+        "sectionabc-test": {
+            "sectionName": "sectionabc-test",
+            "level": 1,
+            "sectionLocation": [],
+            "sectionRef": "sectionRef-sectionabc-test",
+            "additional": {
+                "sectionName": "additional",
+                "level": 2,
+                "htmlFile": "additional_additional.html",
+                "alternativeHtmlFile": "alternative-additional_additional.html",
+                "alternative2HtmlFile": "alternative2-additional_additional.html",
+                "sectionLocation": [],
+                "sectionRef": "sectionRef-additional",
+                "destPath": "./overview-additional.html",
+                "srcPath": "test/scenarios/additional-handlebars-helpers/fixture/src/scss/_test-section.scss",
+                "sectionTitle": "Test Section",
+                "markup": "<div>{{additionalHelper 'Test Passed'}}</div>",
+                "buildDate": "25.9.2019"
+            },
+            "subSections": {
+                "additional": {
+                    "sectionName": "additional",
+                    "level": 2,
+                    "htmlFile": "additional_additional.html",
+                    "alternativeHtmlFile": "alternative-additional_additional.html",
+                    "alternative2HtmlFile": "alternative2-additional_additional.html",
+                    "sectionLocation": [],
+                    "sectionRef": "sectionRef-additional",
+                    "destPath": "./overview-additional.html",
+                    "srcPath": "test/scenarios/additional-handlebars-helpers/fixture/src/scss/_test-section.scss",
+                    "sectionTitle": "Test Section",
+                    "markup": "<div>{{additionalHelper 'Test Passed'}}</div>",
+                    "buildDate": "25.9.2019"
+                }
+            }
+        }
+    }
+}

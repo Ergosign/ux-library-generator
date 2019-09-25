@@ -6,7 +6,7 @@ import { checkDirectoriesMatch } from '../../util/testCompareFiles';
 jest.useFakeTimers();
 jest.setTimeout(15000);
 
-const testFolder = 'test/scenarios/simple-templates';
+const testFolder = 'test/scenarios/additional-handlebars-helpers';
 const generatedFilePath = `${testFolder}/.generated`;
 const expectedPath = `${testFolder}/expected`;
 const fixturePath = `${testFolder}/fixture`;

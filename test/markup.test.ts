@@ -1,7 +1,7 @@
 import * as Handlebars from 'handlebars';
 
 // Local helpers
-import { registerHandlebarsHelpersMarkup} from '../../scripts/handlebarsHelpers/markupHelpers';
+import { registerHandlebarsHelpersMarkup} from '../scripts/handlebarsHelpers/markupHelpers';
 registerHandlebarsHelpersMarkup(Handlebars, {});
 
 describe('the {{markupWithStyle}}', () => {

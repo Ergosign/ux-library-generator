@@ -1,0 +1,9 @@
+{
+  "title":"Simple Templates Test",
+  "targetPath":"../.generated",
+  "assetPath": "src/assets",
+  "imagePath": "src/assets/img",
+  "scssPath": "src/scss",
+  "componentPath": "src/scss",
+  "enableDeltaUpdates" : false
+}
