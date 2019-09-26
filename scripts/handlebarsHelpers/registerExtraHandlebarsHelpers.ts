@@ -12,7 +12,6 @@ const loadHandlebarsHelpersFromDirectory = async (handlebarsEngine, directory: s
 
   const directoryContents = readdirSync(directory);
 
-  const dynamicHelperFilenames = [];
   // find the helpers
   for (const directoryItemPath of directoryContents) {
     if (minimatch(directoryItemPath, '.*')) {
