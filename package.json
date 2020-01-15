@@ -16,10 +16,10 @@
     "lint": "tslint ./scripts/**/*.ts",
     "test-watch": "jest --watch",
     "start-ux-library": "ux-library-generator-copy-files && ux-library-generator-generate && concurrently \"ux-library-generator-generate watch\" \"npm run ux-library-serve\"",
-    "release-it-beta": "release-it -n --preRelease=beta --npm.tag=next --verbose",
-    "release-it-patch": "release-it patch -n --verbose",
-    "release-it-minor": "release-it minor -n --verbose",
-    "release-it-major": "release-it major -n --verbose",
+    "release-it-beta": "npm run build && release-it -n --preRelease=beta --npm.tag=next --verbose",
+    "release-it-patch": "npm run build && release-it patch -n --verbose",
+    "release-it-minor": "npm run build && release-it minor -n --verbose",
+    "release-it-major": "npm run build && release-it major -n --verbose",
     "release": "release-it"
   },
   "bin": {
