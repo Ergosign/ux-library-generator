@@ -7,7 +7,7 @@ import { Bundler } from 'scss-bundle';
 import { UxLibraryConfig } from './typings';
 
 let projectRootFolder = '.';
-let configFilePath = 'src/ux-library/ux-library-config.json'';
+let configFilePath = 'src/ux-library/ux-library-config.json';
 const commandLineArguments = process.argv;
 
 commandLineArguments.forEach((argument, index) => {
