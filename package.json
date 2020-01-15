@@ -1,6 +1,6 @@
 {
   "name": "ux-library-generator",
-  "version": "0.1.0-beta.7",
+  "version": "0.1.0-beta.8",
   "description": "A library to generate UX Library Documentation for projects.",
   "main": "index.js",
   "files": [
