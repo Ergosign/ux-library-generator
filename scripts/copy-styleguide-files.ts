@@ -36,7 +36,7 @@ commandLineArguments.forEach((argument, index) => {
 });
 
 // copy styleguide data
-fsExtra.copySync('node_modules/ux-library-generator/styleguide-data', '.tmp/styleguide-data');
+fsExtra.copySync('node_modules/ux-library-generator/ux-library-data', '.tmp/styleguide-data');
 if (fsExtra.pathExistsSync('ux-library-config/')) {
     fsExtra.copySync('ux-library-config/', '.tmp/styleguide-data');
 } else {

@@ -4,7 +4,8 @@
   "description": "A library to generate UX Library Documentation for projects.",
   "main": "index.js",
   "files": [
-    "dist"
+    "dist",
+    "ux-library-data"
   ],
   "scripts": {
     "build": "npm run compile-scripts",
