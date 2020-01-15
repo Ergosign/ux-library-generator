@@ -6,8 +6,8 @@ import { Bundler } from 'scss-bundle';
 
 import { UxLibraryConfig } from './typings';
 
-let projectRootFolder = 'example';
-let configFilePath = 'styleguide-data/data/site.json';
+let projectRootFolder = '.';
+let configFilePath = 'src/ux-library/ux-library-config.json'';
 const commandLineArguments = process.argv;
 
 commandLineArguments.forEach((argument, index) => {
