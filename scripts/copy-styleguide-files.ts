@@ -62,4 +62,4 @@ if (uxLibraryConfig.scssPath) {
     });
 }
 
-fsExtra.copySync('node_modules/ux-library-generator/tsconfig.json', '.tmp/styleguide/tsconfig.json');
+// fsExtra.copySync('node_modules/ux-library-generator/tsconfig.json', '.tmp/styleguide/tsconfig.json');
