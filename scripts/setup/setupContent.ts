@@ -52,7 +52,7 @@ export function parseSiteJson(projectRootFolder: string, configFilePath: string)
     uxLibraryConfig.dataFilesPath = projectRootFolder + '/' + uxLibraryConfig.dataFilesPath;
   }
   if (uxLibraryConfig.partialsPath === undefined) {
-    uxLibraryConfig.partialsPath = `${projectRootFolder}/src/ux-library/partials`;
+    uxLibraryConfig.partialsPath = `${projectRootFolder}/src/ux-library/layouts`;
   } else {
     uxLibraryConfig.partialsPath = projectRootFolder + '/' + uxLibraryConfig.partialsPath;
   }
