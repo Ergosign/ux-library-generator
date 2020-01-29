@@ -58,7 +58,7 @@ export async function startGeneration(projectRootFolder: string, configFilePath:
         const escapedString = handlebarsEngine.Utils.escapeExpression(removePlaceHolders)
         return escapedString;
       })
-      view.content = transformedContent;
+      view.content = transformedContent.trim();
     }
     console.info(colors.yellow('Generated ==>'), colors.green(view.relative));
   });
