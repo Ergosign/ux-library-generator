@@ -37,10 +37,6 @@ export async function startGeneration(projectRootFolder: string, configFilePath:
     app.layouts([`${uxLibraryConfig.layoutsPath}/*.hbs`]);
     cb();
   });
-  // Add some logging
-  app.on('preRender', (view) => {
-    console.info(colors.yellow('Generating ==>'), colors.green(view.relative));
-  });
 
   // register additional handlebars helpers
   const handlebarsEngine = app.engines['.hbs'].Handlebars;
