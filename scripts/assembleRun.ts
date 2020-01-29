@@ -32,7 +32,7 @@ commandLineArguments.forEach((argument, index) => {
 
 });
 
-console.info(colors.green(`Starting Generator....`));
+console.info(colors.green(`Starting UX Library Generator....`));
 startGeneration(projectRootFolder, configFilePath, () => {
-  console.info(colors.green(`Generation complete`));
+  console.info(colors.green(`UX Library Generation Completed.`));
 });

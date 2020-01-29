@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 import * as fsExtra from 'fs-extra';
+import * as path from 'path';
+
 import { parseSiteJson } from './setup/setupContent';
 import { Bundler } from 'scss-bundle';
 
@@ -35,29 +37,43 @@ commandLineArguments.forEach((argument, index) => {
 
 });
 
-// copy styleguide data
-fsExtra.copySync('node_modules/ux-library-generator/ux-library-data', '.tmp/styleguide-data');
-if (fsExtra.pathExistsSync('ux-library-config/')) {
-    fsExtra.copySync('ux-library-config/', '.tmp/styleguide-data');
+let projectDir;
+if (process.env.INIT_CWD) {
+  projectDir = process.env.INIT_CWD;
 } else {
-    console.log('configuration directory for ux-library missing. \nCreate empty directory');
-    fsExtra.ensureDirSync('ux-library-config/');
-    fsExtra.copySync('ux-library-config/', '.tmp/styleguide-data');
+  console.warn('!Could not detect project directory!');
+  console.warn('Environment variable INIT_CWD is not set.\nPlease use npm scripts to run the install script of this package');
+  projectDir = process.env.PWD;
 }
 
 const uxLibraryConfig: UxLibraryConfig = parseSiteJson(projectRootFolder, configFilePath);
 
+// const styleguideDataFolder = path.join(projectDir, 'node_modules/ux-library-generator/styleguide-data/data');
+// if (fsExtra.existsSync(styleguideDataFolder)) {
+//   // copy styleguide data
+//   fsExtra.copySync(styleguideDataFolder, uxLibraryConfig.targetPath);
+//   if (fsExtra.pathExistsSync('ux-library-config/')) {
+//     fsExtra.copySync('ux-library-config/', '.tmp/styleguide-data');
+//   } else {
+//     console.log('configuration directory for ux-library missing. \nCreate empty directory');
+//     fsExtra.ensureDirSync('ux-library-config/');
+//     fsExtra.copySync('ux-library-config/', '.tmp/styleguide-data');
+//   }
+// }
+
+
+
 if (uxLibraryConfig.assetPath) {
-    fsExtra.copySync(uxLibraryConfig.assetPath, '.tmp/styleguide/src/assets');
+    fsExtra.copySync(uxLibraryConfig.assetPath, `${uxLibraryConfig.targetPath}/${uxLibraryConfig.assetPath}`);
 }
 if (uxLibraryConfig.scssPath) {
     const files = fsExtra.readdirSync(uxLibraryConfig.scssPath);
     const bundler = new Bundler();
-    fsExtra.ensureDirSync('.tmp/styleguide/src/assets/scss/');
+    fsExtra.ensureDirSync(`${uxLibraryConfig.targetPath}/${uxLibraryConfig.assetPath}/scss`);
     files.forEach((value) => {
         bundler.bundle(uxLibraryConfig.scssPath + '/' + value, undefined, undefined, files)
             .then((bundle) => {
-                fsExtra.writeFileSync('.tmp/styleguide/src/assets/scss/' + value, bundle.bundledContent);
+                fsExtra.writeFileSync(`${uxLibraryConfig.targetPath}/${uxLibraryConfig.assetPath}/scss/${value}`, bundle.bundledContent);
             });
     });
 }

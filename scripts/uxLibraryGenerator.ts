@@ -80,7 +80,7 @@ export async function startGeneration(projectRootFolder: string, configFilePath:
       files.forEach((value) => {
         bundler.bundle(uxLibraryConfig.scssPath + '/' + value, undefined, undefined, files)
           .then((bundle) => {
-            fsExtra.writeFileSync(`${projectRootFolder}/.tmp/styleguide/src/assets/scss/${value}`, bundle.bundledContent);
+            fsExtra.writeFileSync(`${projectRootFolder}/${uxLibraryConfig.targetPath}/${uxLibraryConfig.assetPath}/scss/${value}`, bundle.bundledContent);
           });
       });
     }
