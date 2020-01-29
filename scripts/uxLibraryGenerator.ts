@@ -17,6 +17,9 @@ import * as fsExtra from 'fs-extra';
 
 const helpers = handlebarsHelpers();
 
+const RENDER_PRE_CODE_BLOCK_START_MARKER = '!@--RENDER-CODE-START--!@';
+const RENDER_PRE_CODE_BLOCK_END_MARKER = '!@--RENDER-CODE-STOP--!@';
+
 const app = assemble();
 
 export async function startGeneration(projectRootFolder: string, configFilePath: string, done: () => void) {
@@ -47,6 +50,36 @@ export async function startGeneration(projectRootFolder: string, configFilePath:
   app.helper(helpers);
 
   app.use(baseWatch());
+
+  // Add some logging
+  app.on('postRender', (view) => {
+    while (view.content.includes(RENDER_PRE_CODE_BLOCK_START_MARKER)) {
+      // we need to replace some sections of the document
+      const originalContent = view.content + '';
+      const transformedContent = originalContent.replace(/!@--RENDER-CODE-START--!@([^\0])*?!@--RENDER-CODE-STOP--!@/, (str, p1, offset, s) => {
+        const untouchedString = str;
+        const removePlaceHolders = untouchedString.replace(RENDER_PRE_CODE_BLOCK_START_MARKER, '').replace(RENDER_PRE_CODE_BLOCK_END_MARKER, '');
+        const escapedString = handlebarsEngine.Utils.escapeExpression(removePlaceHolders)
+        return escapedString;
+      })
+      view.content = transformedContent;
+    }
+    console.info(colors.yellow('Generated ==>'), colors.green(view.relative));
+  });
+
+
+
+  app.helper('escapifyContents', (str, options) => {
+
+    if (typeof str == 'object') {
+      options = str;
+    }
+
+    const wrapped = options.fn(options.data.root);
+
+    return `${RENDER_PRE_CODE_BLOCK_START_MARKER}${wrapped}${RENDER_PRE_CODE_BLOCK_END_MARKER}`;
+  });
+
 
   // setup our elements
   app.create('uxLibraryElements', {

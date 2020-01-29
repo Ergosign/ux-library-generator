@@ -117,7 +117,7 @@
 
               <div class="es-section-markup-codebox">
                 <pre class="prettyprint linenums lang-html">
-                  <code data-language="html">{{escapedMarkupWithStyle '[modifier_class]'}}</code>
+                  <code data-language="html">{{#escapifyContents}}{{markupWithStyle '[modifier_class]'}}{{/escapifyContents}}</code>
                   <div class="es-section-markup-divider"></div>
                 </pre>
                 <button class="codebox-copy-button" data-clipboard-text="{{markupWithStyle '[modifier_class]'}}">
