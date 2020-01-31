@@ -32,7 +32,7 @@ export async function startGeneration(projectRootFolder: string, configFilePath:
   console.info(`Path to partials: ${pathToPartials}`);
   // configure the partials and layouts
   app.task('load', (cb) => {
-    app.data([`${uxLibraryConfig.dataFilesPath}/*.json`, './src/html/pages/*.json']);
+    app.data([`${uxLibraryConfig.dataFilesPath}/*.json`, uxLibraryConfig.examplePagesSourcePath + '/*.json']);
     app.partials([`${uxLibraryConfig.partialsPath}/*.hbs`, pathToPartials ? pathToPartials : '']);
     app.layouts([`${uxLibraryConfig.layoutsPath}/*.hbs`]);
     cb();
@@ -119,7 +119,7 @@ export async function startGeneration(projectRootFolder: string, configFilePath:
   await registerExtraHandlebarsHelpers(handlebarsEngine, uxLibraryConfig);
 
   // start the assembly
-  app.build(['default'], (err) => {
+  app.build(['default', 'buildPages'], (err) => {
     if (err) {
       console.error('ERROR:', err);
     }
