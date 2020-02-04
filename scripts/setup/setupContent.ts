@@ -66,10 +66,13 @@ export function parseSiteJson(projectRootFolder: string, configFilePath: string)
   } else {
     uxLibraryConfig.examplePagesTargetPath = projectRootFolder + '/' + uxLibraryConfig.examplePagesTargetPath;
   }
-  if (uxLibraryConfig.assetPath === undefined) {
-    uxLibraryConfig.assetPath = `${projectRootFolder}/src/assets`;
-  } else {
-    uxLibraryConfig.assetPath = projectRootFolder + '/' + uxLibraryConfig.assetPath;
+  if (uxLibraryConfig.assetSourcePath === undefined) {
+    uxLibraryConfig.assetSourcePath = `${projectRootFolder}/src/assets`;
+  } else if (uxLibraryConfig.assetSourcePath !== null){
+    uxLibraryConfig.assetSourcePath = projectRootFolder + '/' + uxLibraryConfig.assetSourcePath;
+  }
+  if (uxLibraryConfig.assetTargetPath === undefined) {
+    uxLibraryConfig.assetTargetPath = `assets`;
   }
   if (uxLibraryConfig.imagePath === undefined) {
     uxLibraryConfig.imagePath = `${projectRootFolder}/src/img`;
