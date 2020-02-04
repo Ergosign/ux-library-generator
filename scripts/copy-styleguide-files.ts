@@ -61,19 +61,17 @@ const uxLibraryConfig: UxLibraryConfig = parseSiteJson(projectRootFolder, config
 //   }
 // }
 
-
-
-if (uxLibraryConfig.assetPath) {
-    fsExtra.copySync(uxLibraryConfig.assetPath, `${uxLibraryConfig.targetPath}/${uxLibraryConfig.assetPath}`);
+if (uxLibraryConfig.assetSourcePath && uxLibraryConfig.assetTargetPath) {
+    fsExtra.copySync(uxLibraryConfig.assetSourcePath, `${uxLibraryConfig.targetPath}/${uxLibraryConfig.assetTargetPath}`);
 }
-if (uxLibraryConfig.scssPath) {
+if (uxLibraryConfig.scssPath && uxLibraryConfig.assetTargetPath) {
     const files = fsExtra.readdirSync(uxLibraryConfig.scssPath);
     const bundler = new Bundler();
-    fsExtra.ensureDirSync(`${uxLibraryConfig.targetPath}/${uxLibraryConfig.assetPath}/scss`);
+    fsExtra.ensureDirSync(`${uxLibraryConfig.targetPath}/${uxLibraryConfig.assetTargetPath}/scss`);
     files.forEach((value) => {
         bundler.bundle(uxLibraryConfig.scssPath + '/' + value, undefined, undefined, files)
             .then((bundle) => {
-                fsExtra.writeFileSync(`${uxLibraryConfig.targetPath}/${uxLibraryConfig.assetPath}/scss/${value}`, bundle.bundledContent);
+                fsExtra.writeFileSync(`${uxLibraryConfig.targetPath}/${uxLibraryConfig.assetTargetPath}/scss/${value}`, bundle.bundledContent);
             });
     });
 }

@@ -20,7 +20,8 @@ export interface UxLibraryConfig {
   examplePagesTargetPath: string;
   examplePagesSourcePath: string;
   overviewMarkdownFile: string;
-  assetPath: string;
+  assetSourcePath: string;
+  assetTargetPath: string;
   imagePath: string;
   scssPath: string;
   componentPath: string;
