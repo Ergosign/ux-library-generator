@@ -49,31 +49,38 @@ export async function startGeneration(projectRootFolder: string, configFilePath:
 
   // Add some logging
   app.on('postRender', (view) => {
-    while (view.content.includes(RENDER_PRE_CODE_BLOCK_START_MARKER)) {
+    const originalContent = view.content + '';
+    let transformedContent = originalContent;
+    while (transformedContent.includes(RENDER_PRE_CODE_BLOCK_START_MARKER)) {
       // we need to replace some sections of the document
-      const originalContent = view.content + '';
-      const transformedContent = originalContent.replace(/!@--RENDER-CODE-START--!@([^\0])*?!@--RENDER-CODE-STOP--!@/, (str, p1, offset, s) => {
-        const untouchedString = str;
-        const removePlaceHolders = untouchedString.replace(RENDER_PRE_CODE_BLOCK_START_MARKER, '').replace(RENDER_PRE_CODE_BLOCK_END_MARKER, '');
-        const escapedString = handlebarsEngine.Utils.escapeExpression(removePlaceHolders)
-        return escapedString;
-      })
-      view.content = transformedContent.trim();
+      const searchIndex = transformedContent.indexOf(RENDER_PRE_CODE_BLOCK_START_MARKER);
+      const endIndex = transformedContent.indexOf(RENDER_PRE_CODE_BLOCK_END_MARKER) + RENDER_PRE_CODE_BLOCK_END_MARKER.length;
+
+      const stringToRemove = transformedContent.substr(searchIndex, endIndex - searchIndex);
+
+      const removePlaceHolders = stringToRemove.replace(RENDER_PRE_CODE_BLOCK_START_MARKER, '').replace(RENDER_PRE_CODE_BLOCK_END_MARKER, '');
+
+      const escapedString = handlebarsEngine.Utils.escapeExpression(removePlaceHolders);
+
+      transformedContent = transformedContent.substr(0, searchIndex) + escapedString + transformedContent.substr(endIndex);
     }
+    view.content = transformedContent.trim();
     console.info(colors.yellow('Generated ==>'), colors.green(view.relative));
   });
 
 
 
-  app.helper('escapifyContents', (str, options) => {
+  app.helper('escapifyContents', function(str, options) {
 
     if (typeof str == 'object') {
       options = str;
     }
 
-    const wrapped = options.fn(options.data.root);
+    const context = { ...this.context,...options.data.root, ...this };
+    const wrapped = options.fn(context);
+    const returnString = `${RENDER_PRE_CODE_BLOCK_START_MARKER}${wrapped}${RENDER_PRE_CODE_BLOCK_END_MARKER}`;
 
-    return `${RENDER_PRE_CODE_BLOCK_START_MARKER}${wrapped}${RENDER_PRE_CODE_BLOCK_END_MARKER}`;
+    return returnString;
   });
 
 
