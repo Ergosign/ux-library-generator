@@ -339,17 +339,20 @@ export function registerHandlebarsHelpersStyleguide(Handlebars) {
   Handlebars.registerHelper('eachPseudoVariation', function(options) {
 
     const pseudoClasses = ['hover', 'active', 'focus'];
-    const newContext = cloneDeep(this);
+    const firstContext = cloneDeep(this);
     let buffer = '';
-    if (!newContext) {
+    if (!firstContext) {
       return buffer;
     }
 
-    pseudoClasses.forEach((pseudoVariation) => {
+    pseudoClasses.forEach(function(pseudoVariation) {
+      const newContext = { ...firstContext };
 
       // add modifier_class to markupContext
       if (!newContext.hasOwnProperty('markupContext')) {
         newContext.markupContext = {};
+      } else {
+        newContext.markupContext = { ...newContext.markupContext };
       }
 
       newContext.markupContext.pseudoClassName = pseudoVariation;
@@ -364,13 +367,14 @@ export function registerHandlebarsHelpersStyleguide(Handlebars) {
   Handlebars.registerHelper('eachAlternativePseudoVariation', (options) => {
 
     const pseudoClasses = ['hover', 'active', 'focus'];
-    const newContext = cloneDeep(this);
+    const firstContext = cloneDeep(this);
     let buffer = '';
-    if (!newContext) {
+    if (!firstContext) {
       return buffer;
     }
 
-    pseudoClasses.forEach((pseudoVariation) => {
+    pseudoClasses.forEach(function(pseudoVariation) {
+      const newContext = cloneDeep(firstContext);
 
       // add modifier_class to markupContext
       if (!newContext.hasOwnProperty('alternativeMarkupContext')) {
