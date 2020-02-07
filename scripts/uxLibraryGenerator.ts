@@ -60,11 +60,11 @@ export async function startGeneration(projectRootFolder: string, configFilePath:
 
       const removePlaceHolders = stringToRemove.replace(RENDER_PRE_CODE_BLOCK_START_MARKER, '').replace(RENDER_PRE_CODE_BLOCK_END_MARKER, '');
 
-      const escapedString = handlebarsEngine.Utils.escapeExpression(removePlaceHolders);
+      let escapedString = handlebarsEngine.Utils.escapeExpression(removePlaceHolders).trim();
 
       transformedContent = transformedContent.substr(0, searchIndex) + escapedString + transformedContent.substr(endIndex);
     }
-    view.content = transformedContent.trim();
+    view.content = transformedContent;
     console.info(colors.yellow('Generated ==>'), colors.green(view.relative));
   });
 

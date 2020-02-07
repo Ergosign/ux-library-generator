@@ -33,7 +33,6 @@ export function registerHandlebarsHelpersMarkup(Handlebars, engine) {
       template = Handlebars.compile(markup);
     }
     let html = template(markupContext);
-    html = html.trim();
     return html;
   }
 
@@ -104,8 +103,6 @@ export function registerHandlebarsHelpersMarkup(Handlebars, engine) {
     }
 
     let html = template(markupContext);
-    html = html.trim();
-
     return html;
   });
 
@@ -145,8 +142,6 @@ export function registerHandlebarsHelpersMarkup(Handlebars, engine) {
     }
 
     let html = template(markupContext);
-    html = html.trim();
-
     return html;
   });
 
