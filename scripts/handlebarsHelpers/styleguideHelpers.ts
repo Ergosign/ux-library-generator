@@ -364,7 +364,7 @@ export function registerHandlebarsHelpersStyleguide(Handlebars) {
     return buffer;
   });
 
-  Handlebars.registerHelper('eachAlternativePseudoVariation', (options) => {
+  Handlebars.registerHelper('eachAlternativePseudoVariation', function(options) {
 
     const pseudoClasses = ['hover', 'active', 'focus'];
     const firstContext = cloneDeep(this);
@@ -379,6 +379,8 @@ export function registerHandlebarsHelpersStyleguide(Handlebars) {
       // add modifier_class to markupContext
       if (!newContext.hasOwnProperty('alternativeMarkupContext')) {
         newContext.alternativeMarkupContext = {};
+      } else {
+        newContext.alternativeMarkupContext = { ...newContext.alternativeMarkupContext };
       }
 
       newContext.alternativeMarkupContext.pseudoClassName = pseudoVariation;
@@ -405,6 +407,9 @@ export function registerHandlebarsHelpersStyleguide(Handlebars) {
       // add modifier_class to markupContext
       if (!newContext.hasOwnProperty('alternative2MarkupContext')) {
         newContext.alternative2MarkupContext = {};
+      }
+      else {
+        newContext.alternative2MarkupContext = { ...newContext.alternative2MarkupContext };
       }
 
       newContext.alternative2MarkupContext.pseudoClassName = pseudoVariation;
