@@ -45,7 +45,7 @@ export function addSubSectionsToObject(subSections, parentSection, pathToRootSec
   }
 
   // check if this section name already exists before creating
-  if (!parentSection[subSections[0]]) {
+  if (!parentSection[currentSectionNameWithoutWhitespace]) {
     let htmlFilePath;
     let alternativeHtmlFilePath;
     let alternative2HtmlFilePath;
@@ -81,7 +81,7 @@ export function addSubSectionsToObject(subSections, parentSection, pathToRootSec
     }
 
     const newSection = {
-      sectionName: currentSectionName,
+      sectionName: currentSectionNameWithoutWhitespace,
       level: parentSection.level + 1,
       htmlFile: htmlFilePath,
       alternativeHtmlFile: alternativeHtmlFilePath,
@@ -90,12 +90,12 @@ export function addSubSectionsToObject(subSections, parentSection, pathToRootSec
       sectionRef,
       destPath: destinationPath
     };
-    parentSection[currentSectionName] = newSection;
+    parentSection[currentSectionNameWithoutWhitespace] = newSection;
     if (!parentSection.subSections) {
       parentSection.subSections = {};
     }
-    if (!parentSection.subSections[currentSectionName]) {
-      parentSection.subSections[currentSectionName] = newSection;
+    if (!parentSection.subSections[currentSectionNameWithoutWhitespace]) {
+      parentSection.subSections[currentSectionNameWithoutWhitespace] = newSection;
     }
   }
 
@@ -109,7 +109,7 @@ export function addSubSectionsToObject(subSections, parentSection, pathToRootSec
   }
 
   // load this section
-  const currentSection = parentSection[currentSectionName];
+  const currentSection = parentSection[currentSectionNameWithoutWhitespace];
   // go deeper if required
   if (subSections.length > 1) {
     const remainingSections = subSections.slice(1);
