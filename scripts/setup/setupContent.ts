@@ -4,7 +4,7 @@ import * as colors from 'colors/safe';
 
 import { UxLibraryConfig, Section } from '../typings';
 
-import { merge , extend } from 'lodash';
+import { merge, extend } from 'lodash';
 import * as fs from 'fs';
 import * as fsExtra from 'fs-extra';
 
@@ -68,7 +68,7 @@ export function parseSiteJson(projectRootFolder: string, configFilePath: string)
   }
   if (uxLibraryConfig.assetSourcePath === undefined) {
     uxLibraryConfig.assetSourcePath = `${projectRootFolder}/src/assets`;
-  } else if (uxLibraryConfig.assetSourcePath !== null){
+  } else if (uxLibraryConfig.assetSourcePath !== null) {
     uxLibraryConfig.assetSourcePath = projectRootFolder + '/' + uxLibraryConfig.assetSourcePath;
   }
   if (uxLibraryConfig.assetTargetPath === undefined) {
@@ -142,7 +142,6 @@ export function setupContent(app: Assemble, uxLibraryConfig: UxLibraryConfig) {
       const section = sections[sectionKey];
 
       if (sectionKey === 'index') {
-
         // create html file for the index page
         createHtmlFileForSection(section, sectionKey, navBarItems, sectionKey, uxLibraryConfig, app);
       } else if (typeof (section) === 'object' && section.sectionName !== undefined) {
@@ -160,9 +159,37 @@ export function setupContent(app: Assemble, uxLibraryConfig: UxLibraryConfig) {
     }
   }
 
+  let searchIndexInfo = {};
+
+  // extracts section infos for search index file
+  // this is necessary because otherwise the file would be too large
+  let createSearchIndex = function (fromSections, searchIndexSection) {
+    for (const sectionKey in fromSections) {
+      if (fromSections.hasOwnProperty(sectionKey)) {
+        const section = fromSections[sectionKey];
+
+        if (typeof (section) === 'object' && section.sectionName !== undefined) {
+
+          // currently we dont include the section description to reduce file size
+          searchIndexSection[sectionKey] = {
+            sectionName: section.sectionName,
+            sectionTitle: section.sectionTitle,
+            level: section.level,
+            description: '',
+            sectionLocation: section.sectionLocation,
+            destPath: section.destPath,
+          };
+          createSearchIndex(section, searchIndexSection[sectionKey]);
+        }
+      }
+    }
+  };
+
+  createSearchIndex(sections, searchIndexInfo);
+
   // write a file containing all sections and their data. This file is used by the search.
   if (uxLibraryConfig.targetPath !== undefined) {
-    fsExtra.outputFileSync(uxLibraryConfig.targetPath + '/data/search-index.json', JSON.stringify(sections, null, 4));
+    fsExtra.outputFileSync(uxLibraryConfig.targetPath + '/data/search-index.json', JSON.stringify(searchIndexInfo, null, 4));
   } else {
     console.error('Please specify the targetPath in your site.json.');
   }
@@ -247,7 +274,7 @@ export function createHtmlFileForSection(sectionData, sectionName, navBarItems, 
   let filePath;
 
   if (sectionName !== 'index') {
-    filePath = '/overview-' + sectionName.toLowerCase() + '.html';
+    filePath = '/overview-' + sectionName + '.html';
   } else {
     filePath = '/' + sectionName.toLowerCase() + '.html';
   }
@@ -288,10 +315,10 @@ export function createHtmlFileForSection(sectionData, sectionName, navBarItems, 
 
   if (generate) {
     app.uxLibraryElement(currentPage.dest, {
-      content: '',
-      data: currentPage.data,
-      page: currentPage.data
-    }
+        content: '',
+        data: currentPage.data,
+        page: currentPage.data
+      }
     );
 
     if (uxLibraryConfig.templateNameIframe !== undefined) {
@@ -364,24 +391,24 @@ export function createHtmlIframeFilesForSection(sectionKey, section, uxLibraryCo
     firstPage.data = merge(firstPage.data, section);
 
     app.uxLibraryElement(firstPage.dest, {
-      content: '',
-      data: firstPage.data
-    }
+        content: '',
+        data: firstPage.data
+      }
     );
 
     if (section.alternativeMarkup) {
       app.uxLibraryElement(alternativePage.dest, {
-        content: '',
-        data: alternativePage.data
-      }
+          content: '',
+          data: alternativePage.data
+        }
       );
     }
 
     if (section.alternative2Markup) {
       app.uxLibraryElement(alternative2Page.dest, {
-        content: '',
-        data: alternative2Page.data
-      }
+          content: '',
+          data: alternative2Page.data
+        }
       );
     }
 
@@ -442,24 +469,24 @@ export function createHtmlIframeFilesForSubsections(section, uxLibraryConfig: Ux
         subSectionPage.data = merge(subSectionPage.data, subSection);
 
         app.uxLibraryElement(subSectionPage.dest, {
-          content: '',
-          data: subSectionPage.data
-        }
+            content: '',
+            data: subSectionPage.data
+          }
         );
 
         if (subSection.alternativeMarkup) {
           app.uxLibraryElement(alternativeSubSectionPage.dest, {
-            content: '',
-            data: alternativeSubSectionPage.data
-          }
+              content: '',
+              data: alternativeSubSectionPage.data
+            }
           );
         }
 
         if (subSection.alternative2Markup) {
           app.uxLibraryElement(alternative2SubSectionPage.dest, {
-            content: '',
-            data: alternative2SubSectionPage.data
-          }
+              content: '',
+              data: alternative2SubSectionPage.data
+            }
           );
         }
 
@@ -475,7 +502,7 @@ export function createHtmlIframeFilesForSubsections(section, uxLibraryConfig: Ux
  * in a german date format (e.g.: '01.01.1970').
  */
 export function formattedDateAsString(date) {
-  const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+  const options = {year: 'numeric', month: 'numeric', day: 'numeric'};
 
   return date.toLocaleDateString('de-DE', options);
 }
